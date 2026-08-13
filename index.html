@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>世郡 & 禾昀的婚紗相簿</title>
+    <style>
+        /* 基礎設定 */
+        body { 
+            font-family: 'Helvetica Neue', Arial, sans-serif; 
+            margin: 0; 
+            background-color: #fafafa; 
+            color: #333; 
+        }
+
+        /* --------------------------
+           首頁輪播區塊 (Home View)
+           -------------------------- */
+        #home-view { 
+            position: relative; 
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .carousel-slide { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0; 
+            transition: opacity 1.5s ease-in-out; 
+            z-index: 0; 
+        }
+        .carousel-slide.active { 
+            opacity: 1; 
+        }
+        .home-content { 
+            z-index: 10; 
+            text-align: center; 
+            background: rgba(255, 255, 255, 0.85); 
+            padding: 40px 60px; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .home-content h1 {
+            font-weight: 300; 
+            margin: 0 0 20px 0; 
+            letter-spacing: 2px; 
+            color: #5c4a4d;
+        }
+        .enter-btn { 
+            padding: 12px 30px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            background: #5c4a4d; 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            transition: background 0.3s;
+            letter-spacing: 1px;
+        }
+        .enter-btn:hover {
+            background: #4a3b3d;
+        }
+
+        /* --------------------------
+           相簿網格區塊 (Gallery View)
+           -------------------------- */
+        #gallery-view { 
+            display: none; 
+            padding: 40px 20px; 
+            text-align: center; 
+        }
+        #gallery-view h2 {
+            font-weight: 300; 
+            color: #5c4a4d;
+            margin-bottom: 30px;
+        }
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .gallery img { 
+            width: 100%; 
+            aspect-ratio: 1; /* 讓縮圖保持正方形 */
+            object-fit: cover; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
+        .gallery img:hover { 
+            transform: scale(1.03); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --------------------------
+           燈箱區塊與底部縮圖 (Lightbox)
+           -------------------------- */
+        #lightbox { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 1000; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        #lightbox.active { 
+            display: flex; 
+        }
+        .close-btn { 
+            position: absolute; 
+            top: 15px; 
+            right: 25px; 
+            color: white; 
+            font-size: 40px; 
+            cursor: pointer; 
+            z-index: 1001; 
+        }
+        .lightbox-main { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            width: 100%; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #lightbox-img { 
+            max-width: 100%; 
+            max-height: 80vh; 
+            border-radius: 4px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        /* 底部縮圖列 */
+        .lightbox-thumbnails { 
+            display: flex; 
+            overflow-x: auto; 
+            width: 100%; 
+            padding: 15px 10px; 
+            background: rgba(20,20,20,0.8); 
+            gap: 10px; 
+            box-sizing: border-box; 
+            align-items: center; 
+            height: 120px; 
+        }
+        .lightbox-thumbnails img { 
+            height: 80px; 
+            min-width: 80px; 
+            object-fit: cover; 
+            cursor: pointer; 
+            opacity: 0.4; 
+            transition: opacity 0.3s, border 0.3s; 
+            border-radius: 6px; 
+            border: 2px solid transparent; 
+        }
+        .lightbox-thumbnails img.active { 
+            opacity: 1; 
+            border-color: #fff; 
+        }
+        
+        /* 美化縮圖列的捲軸 (主要針對電腦版) */
+        .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
+        .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #666; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- 首頁輪播區塊 -->
+    <div id="home-view">
+        <div id="carousel-container">
+            <!-- 輪播圖片會透過 JavaScript 自動產生在這裡 -->
+        </div>
+        <div class="home-content">
+            <h1>世郡 & 禾昀的婚紗相簿</h1>
+            <button class="enter-btn" onclick="enterAlbum()">進入相簿瀏覽</button>
+        </div>
+    </div>
+
+    <!-- 相簿網格區塊 -->
+    <div id="gallery-view">
+        <h2>所有照片</h2>
+        <div class="gallery" id="gallery">
+            <!-- 網格縮圖會透過 JavaScript 自動產生在這裡 -->
+        </div>
+    </div>
+
+    <!-- 燈箱與底部縮圖區塊 -->
+    <div id="lightbox">
+        <span class="close-btn" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-main">
+            <img id="lightbox-img" src="" alt="Enlarged photo">
+        </div>
+        <!-- 底部縮圖列 -->
+        <div class="lightbox-thumbnails" id="lightbox-thumbnails">
+            <!-- 底部小圖會透過 JavaScript 自動產生在這裡 -->
+        </div>
+    </div>
+
+    <script>
+        const totalPhotos = 30; // 你的照片總數
+
+        const carouselContainer = document.getElementById('carousel-container');
+        const gallery = document.getElementById('gallery');
+        const lightboxThumbnails = document.getElementById('lightbox-thumbnails');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightbox = document.getElementById('lightbox');
+        
+        // 批次產生圖片元素
+        for (let i = 1; i <= totalPhotos; i++) {
+            const src = `images/photo${i}.jpg`;
+            
+            // 1. 生成首頁輪播圖
+            const carouselImg = document.createElement('img');
+            carouselImg.src = src;
+            carouselImg.className = i === 1 ? 'carousel-slide active' : 'carousel-slide';
+            carouselContainer.appendChild(carouselImg);
+            
+            // 2. 生成相簿網格
+            const galleryImg = document.createElement('img');
+            galleryImg.src = src;
+            galleryImg.loading = "lazy";
+            galleryImg.onclick = () => openLightbox(i);
+            gallery.appendChild(galleryImg);
+            
+            // 3. 生成燈箱底部縮圖
+            const thumbImg = document.createElement('img');
+            thumbImg.src = src;
+            thumbImg.loading = "lazy";
+            thumbImg.id = `thumb-${i}`;
+            thumbImg.onclick = () => showInLightbox(i);
+            lightboxThumbnails.appendChild(thumbImg);
+        }
+        
+        // --- 輪播圖邏輯 ---
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        // 設定每 4 秒切換一張背景圖
+        setInterval(() => {
+            slides[slideIndex].classList.remove('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
+        }, 4000); 
+        
+        // --- 頁面切換邏輯 ---
+        function enterAlbum() {
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('gallery-view').style.display = 'block';
+            window.scrollTo(0, 0); // 切換時自動回到網頁最上方
+        }
+        
+        // --- 燈箱邏輯 ---
+        function openLightbox(index) {
+            lightbox.classList.add('active');
+            showInLightbox(index);
+        }
+        
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+        
+        // 點擊黑色背景也可以關閉燈箱
+        document.querySelector('.lightbox-main').addEventListener('click', function(e) {
+            if (e.target !== lightboxImg) {
+                closeLightbox();
+            }
+        });
+
+        // 在燈箱中顯示被選中的照片，並更新底部縮圖狀態
+        function showInLightbox(index) {
+            // 更新上方主圖
+            lightboxImg.src = `images/photo${index}.jpg`;
+            
+            // 清除所有縮圖的發亮狀態
+            const thumbs = document.querySelectorAll('.lightbox-thumbnails img');
+            thumbs.forEach(t => t.classList.remove('active'));
+            
+            // 讓目前點選的這張縮圖發亮
+            const activeThumb = document.getElementById(`thumb-${index}`);
+            activeThumb.classList.add('active');
+            
+            // 讓底部的縮圖列自動捲動，把目前的縮圖置中對齊
+            activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    </script>
+</body>
+</html>
