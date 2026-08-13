@@ -15,57 +15,42 @@
         }
 
         /* --------------------------
-           新增：柔和光暈背景裝飾 (固定在最底層)
+           柔和光暈背景裝飾 (固定在最底層)
            -------------------------- */
         .bg-decoration {
             position: fixed;
             border-radius: 50%;
-            filter: blur(80px); /* 極度柔化邊緣 */
-            opacity: 0.3; /* 非常透明，不影響閱讀 */
-            z-index: -1; /* 確保在所有照片與文字的後面 */
-            pointer-events: none; /* 滑鼠無法點擊到它 */
+            filter: blur(80px);
+            opacity: 0.3; 
+            z-index: -1; 
+            pointer-events: none; 
         }
         .dec-1 {
-            width: 40vw; 
-            height: 40vw;
-            background-color: #f4a261; /* 呼應首頁的暖橘色 */
-            top: -10vh; 
-            left: -10vw;
+            width: 40vw; height: 40vw; background-color: #f4a261; 
+            top: -10vh; left: -10vw;
         }
         .dec-2 {
-            width: 50vw; 
-            height: 50vw;
-            background-color: #a8dadc; /* 呼應首頁的天藍色 */
-            bottom: -15vh; 
-            right: -10vw;
+            width: 50vw; height: 50vw; background-color: #a8dadc; 
+            bottom: -15vh; right: -10vw;
         }
 
         /* --------------------------
            首頁慶祝動畫區塊 (Home View)
            -------------------------- */
         #home-view { 
-            position: relative; 
-            height: 100vh; 
-            width: 100vw; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
+            position: relative; height: 100vh; width: 100vw; 
+            overflow: hidden; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            z-index: 10; /* 蓋住底層裝飾 */
+            z-index: 10; 
         }
         
         .celebration-content { 
-            z-index: 10; 
-            text-align: center; 
-            background: rgba(255, 255, 255, 0.9); 
-            padding: 50px 70px; 
-            border-radius: 20px; 
+            z-index: 10; text-align: center; background: rgba(255, 255, 255, 0.9); 
+            padding: 50px 70px; border-radius: 20px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            opacity: 0;
-            transform: scale(0.8);
+            opacity: 0; transform: scale(0.8);
         }
         @keyframes popIn {
             to { opacity: 1; transform: scale(1); }
@@ -108,39 +93,54 @@
            -------------------------- */
         #gallery-view { 
             display: none; padding: 40px 20px; text-align: center; 
-            animation: fadeIn 0.8s ease forwards;
-            background: transparent; /* 改為透明以顯示底層光暈 */
+            animation: fadeIn 0.8s ease forwards; background: transparent; 
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
 
+        /* 輪播圖容器 */
         #gallery-carousel {
             position: relative; width: 100%; max-width: 1200px;
             aspect-ratio: 3 / 2; max-height: 80vh; 
             margin: 0 auto 50px auto; border-radius: 16px; overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             background-color: rgba(255, 255, 255, 0.6); 
-            backdrop-filter: blur(10px); /* 讓輪播圖背景有毛玻璃質感 */
+            backdrop-filter: blur(10px); 
         }
+        
+        /* 更新：輪播圖幻燈片排版 (支援單張與雙張並排) */
         .carousel-slide { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            object-fit: contain; opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 0; 
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            padding: 10px; box-sizing: border-box; /* 讓照片與邊緣保留一點呼吸空間 */
+            opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 0; 
         }
-        .carousel-slide.active { opacity: 1; }
+        .carousel-slide.active { opacity: 1; z-index: 1; }
+        
+        /* 單張橫式照片滿版、不裁切 */
+        .carousel-slide img { 
+            height: 100%; width: 100%; object-fit: contain; 
+        }
+        /* 直式雙拼照片各佔一半寬度、不裁切 */
+        .carousel-slide.dual-portrait img {
+            width: calc(50% - 5px);
+        }
 
         #gallery-view h2 {
             font-weight: 300; color: #5c4a4d; margin-bottom: 30px; letter-spacing: 2px;
         }
+        
         .gallery { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
             gap: 15px; max-width: 1200px; margin: 0 auto; 
         }
         .gallery img { 
             width: 100%; aspect-ratio: 1; object-fit: cover; 
             border-radius: 8px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; 
-            background: white; padding: 4px; box-sizing: border-box; /* 給縮圖加一點拍立得的白色邊框感 */
+            background: white; padding: 4px; box-sizing: border-box; 
         }
         .gallery img:hover { 
             transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15);
@@ -181,30 +181,33 @@
             display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; 
         }
         #backToTopBtn:hover { background-color: #4a3b3d; transform: translateY(-3px); }
-
-        /* 留言板區塊 */
-        #comments-section {
-            max-width: 800px; margin: 60px auto 40px auto; padding: 30px;
-            background: rgba(255, 255, 255, 0.85); /* 微微透明，透出後方光暈 */
-            backdrop-filter: blur(5px);
-            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left;
-        }
-        #comments-section h3 {
-            text-align: center; color: #5c4a4d; margin-top: 0; margin-bottom: 20px; font-weight: 300;
-        }
         
+        /* --------------------------
+           行動裝置專屬優化 (Media Query)
+           -------------------------- */
         @media (max-width: 768px) {
-            #gallery-carousel { aspect-ratio: 4 / 3; }
+            #gallery-carousel { aspect-ratio: 4 / 3; margin-bottom: 30px; }
+            #gallery-view { padding: 20px 10px; }
+            
+            .gallery { 
+                grid-template-columns: repeat(3, 1fr); 
+                gap: 5px; 
+            }
+            .gallery img {
+                padding: 2px; border-radius: 4px; 
+            }
+            
+            .celebration-content { padding: 40px 30px; }
+            .celebration-content h1 { font-size: 28px; }
+            .celebration-content p { font-size: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 隱藏在底層的柔和光暈裝飾 -->
     <div class="bg-decoration dec-1"></div>
     <div class="bg-decoration dec-2"></div>
 
-    <!-- 首頁慶祝動畫區塊 -->
     <div id="home-view">
         <div class="celebration-content">
             <div class="subtitle">Just Married</div>
@@ -214,18 +217,13 @@
         </div>
     </div>
 
-    <!-- 相簿與留言板區塊 -->
     <div id="gallery-view">
+        <!-- 輪播圖 -->
         <div id="gallery-carousel"></div>
         <h2>所有照片</h2>
         <div class="gallery" id="gallery"></div>
-        <div id="comments-section">
-            <h3>留給我們的祝福</h3>
-            <div id="disqus_thread"></div>
-        </div>
     </div>
 
-    <!-- 燈箱區塊 -->
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main">
@@ -234,7 +232,6 @@
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
     </div>
 
-    <!-- 回到頂部按鈕 -->
     <button id="backToTopBtn" onclick="scrollToTop()" title="回到最上方">↑</button>
 
     <script>
@@ -254,7 +251,7 @@
             homeView.appendChild(confetti);
         }
 
-        // --- 圖片產生與邏輯 ---
+        // --- 圖片產生與分組邏輯 ---
         const totalPhotos = 30; 
         const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
@@ -262,9 +259,12 @@
         const lightboxImg = document.getElementById('lightbox-img');
         const lightbox = document.getElementById('lightbox');
         
+        const imagePromises = [];
+
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
+            // 1. 快速產生下方相簿網格與縮圖
             const galleryImg = document.createElement('img');
             galleryImg.src = src;
             galleryImg.loading = "lazy";
@@ -278,38 +278,97 @@
             thumbImg.onclick = () => showInLightbox(i);
             lightboxThumbnails.appendChild(thumbImg);
 
-            const imgObj = new Image();
-            imgObj.src = src;
-            imgObj.onload = function() {
-                if (this.naturalWidth > this.naturalHeight) {
-                    const carouselImg = document.createElement('img');
-                    carouselImg.src = src;
-                    carouselImg.className = 'carousel-slide';
-                    galleryCarousel.appendChild(carouselImg);
-                    if (galleryCarousel.children.length === 1) {
-                        carouselImg.classList.add('active');
-                    }
-                }
-            };
+            // 2. 利用 Promise 非同步檢查圖片尺寸方向
+            const promise = new Promise((resolve) => {
+                const imgObj = new Image();
+                imgObj.onload = function() {
+                    resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight });
+                };
+                imgObj.onerror = function() {
+                    resolve(null); // 若檔案缺失不中斷程式
+                };
+                imgObj.src = src;
+            });
+            imagePromises.push(promise);
         }
         
-        let slideIndex = 0;
-        setInterval(() => {
-            const slides = document.querySelectorAll('.carousel-slide');
-            if (slides.length > 1) {
-                slides[slideIndex % slides.length].classList.remove('active');
-                slideIndex = (slideIndex + 1) % slides.length;
-                slides[slideIndex].classList.add('active');
+        // 等待所有照片尺寸檢查完畢後，再處理輪播圖排版
+        Promise.all(imagePromises).then((results) => {
+            const landscapes = [];
+            const portraits = [];
+
+            // 分類橫式與直式照片
+            results.forEach(res => {
+                if (res) {
+                    if (res.isLandscape) landscapes.push(res.src);
+                    else portraits.push(res.src);
+                }
+            });
+
+            const slidesElements = [];
+
+            // 處理橫式照片 (單張)
+            landscapes.forEach(src => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                const img = document.createElement('img');
+                img.src = src;
+                slide.appendChild(img);
+                galleryCarousel.appendChild(slide);
+                slidesElements.push(slide);
+            });
+
+            // 處理直式照片 (兩張併為一組)
+            for (let i = 0; i < portraits.length; i += 2) {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide dual-portrait';
+
+                const img1 = document.createElement('img');
+                img1.src = portraits[i];
+                slide.appendChild(img1);
+
+                // 如果還有下一張直式照片，就併在一起
+                if (i + 1 < portraits.length) {
+                    const img2 = document.createElement('img');
+                    img2.src = portraits[i + 1];
+                    slide.appendChild(img2);
+                }
+                
+                galleryCarousel.appendChild(slide);
+                slidesElements.push(slide);
             }
-        }, 4000); 
+
+            // --- 開始執行隨機輪播 ---
+            if (slidesElements.length > 0) {
+                // 網頁載入時，第一張顯示的照片也「隨機抽籤」決定
+                let currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
+                slidesElements[currentCarouselIndex].classList.add('active');
+
+                // 設定計時器，每 4 秒切換到下一張隨機照片
+                setInterval(() => {
+                    if (slidesElements.length > 1) {
+                        slidesElements.forEach(slide => slide.classList.remove('active'));
+                        
+                        let nextIndex;
+                        do {
+                            nextIndex = Math.floor(Math.random() * slidesElements.length);
+                        } while (nextIndex === currentCarouselIndex); // 確保不會抽到重複的
+                        
+                        currentCarouselIndex = nextIndex;
+                        slidesElements[currentCarouselIndex].classList.add('active');
+                    }
+                }, 4000);
+            }
+        });
         
+        // --- 頁面切換 ---
         function enterAlbum() {
-            // 首頁淡出，讓相簿顯現
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('gallery-view').style.display = 'block';
             window.scrollTo(0, 0); 
         }
         
+        // --- 燈箱控制 ---
         function openLightbox(index) {
             lightbox.classList.add('active');
             showInLightbox(index);
@@ -331,6 +390,7 @@
             activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
+        // --- 回到頂部按鈕 ---
         const backToTopBtn = document.getElementById("backToTopBtn");
         window.onscroll = function() {
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
@@ -343,19 +403,6 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' }); 
         }
-
-        // --- Disqus 留言板載入邏輯 ---
-        var disqus_config = function () {
-            this.page.url = window.location.href;  
-            this.page.identifier = "wedding-album-2026"; 
-        };
-        (function() { 
-            var d = document, s = d.createElement('script');
-            // 請替換下方的 YOUR_DISQUS_SHORTNAME (若未替換請記得修改)
-            s.src = 'https://luo-3.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        })();
     </script>
 </body>
 </html>
