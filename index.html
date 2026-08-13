@@ -11,10 +11,37 @@
             margin: 0; 
             background-color: #fafafa; 
             color: #333; 
+            position: relative;
         }
 
         /* --------------------------
-           首頁輪播區塊 (Home View)
+           新增：柔和光暈背景裝飾 (固定在最底層)
+           -------------------------- */
+        .bg-decoration {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px); /* 極度柔化邊緣 */
+            opacity: 0.3; /* 非常透明，不影響閱讀 */
+            z-index: -1; /* 確保在所有照片與文字的後面 */
+            pointer-events: none; /* 滑鼠無法點擊到它 */
+        }
+        .dec-1 {
+            width: 40vw; 
+            height: 40vw;
+            background-color: #f4a261; /* 呼應首頁的暖橘色 */
+            top: -10vh; 
+            left: -10vw;
+        }
+        .dec-2 {
+            width: 50vw; 
+            height: 50vw;
+            background-color: #a8dadc; /* 呼應首頁的天藍色 */
+            bottom: -15vh; 
+            right: -10vw;
+        }
+
+        /* --------------------------
+           首頁慶祝動畫區塊 (Home View)
            -------------------------- */
         #home-view { 
             position: relative; 
@@ -25,276 +52,310 @@
             flex-direction: column; 
             justify-content: center; 
             align-items: center; 
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            z-index: 10; /* 蓋住底層裝飾 */
         }
-        .carousel-slide { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            opacity: 0; 
-            transition: opacity 1.5s ease-in-out; 
-            z-index: 0; 
-        }
-        .carousel-slide.active { 
-            opacity: 1; 
-        }
-        .home-content { 
+        
+        .celebration-content { 
             z-index: 10; 
             text-align: center; 
-            background: rgba(255, 255, 255, 0.85); 
-            padding: 40px 60px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.9); 
+            padding: 50px 70px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            opacity: 0;
+            transform: scale(0.8);
         }
-        .home-content h1 {
-            font-weight: 300; 
-            margin: 0 0 20px 0; 
-            letter-spacing: 2px; 
-            color: #5c4a4d;
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1); }
         }
+
+        .celebration-content .subtitle {
+            font-size: 20px; color: #d4a373; letter-spacing: 4px;
+            margin-bottom: 10px; text-transform: uppercase;
+        }
+        .celebration-content h1 {
+            font-weight: 400; font-size: 36px; margin: 0 0 15px 0; 
+            letter-spacing: 2px; color: #5c4a4d;
+        }
+        .celebration-content p {
+            font-size: 18px; color: #777; margin-bottom: 30px; letter-spacing: 1px;
+        }
+
         .enter-btn { 
-            padding: 12px 30px; 
-            font-size: 16px; 
-            cursor: pointer; 
-            background: #5c4a4d; 
-            color: white; 
-            border: none; 
-            border-radius: 30px; 
-            transition: background 0.3s;
-            letter-spacing: 1px;
+            padding: 14px 40px; font-size: 16px; cursor: pointer; 
+            background: #5c4a4d; color: white; border: none; 
+            border-radius: 30px; transition: all 0.3s ease;
+            letter-spacing: 1px; box-shadow: 0 4px 15px rgba(92, 74, 77, 0.3);
         }
         .enter-btn:hover {
-            background: #4a3b3d;
+            background: #4a3b3d; transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(92, 74, 77, 0.4);
+        }
+
+        .confetti {
+            position: absolute; top: -10px; width: 10px; height: 10px;
+            background-color: #f2d74e; opacity: 0; animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { opacity: 1; top: -10px; transform: translateX(0) rotate(0deg); }
+            100% { opacity: 1; top: 100vh; transform: translateX(100px) rotate(720deg); }
         }
 
         /* --------------------------
-           相簿網格區塊 (Gallery View)
+           相簿網格與輪播區塊 (Gallery View)
            -------------------------- */
         #gallery-view { 
-            display: none; 
-            padding: 40px 20px; 
-            text-align: center; 
+            display: none; padding: 40px 20px; text-align: center; 
+            animation: fadeIn 0.8s ease forwards;
+            background: transparent; /* 改為透明以顯示底層光暈 */
         }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #gallery-carousel {
+            position: relative; width: 100%; max-width: 1200px;
+            aspect-ratio: 3 / 2; max-height: 80vh; 
+            margin: 0 auto 50px auto; border-radius: 16px; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            background-color: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(10px); /* 讓輪播圖背景有毛玻璃質感 */
+        }
+        .carousel-slide { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            object-fit: contain; opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 0; 
+        }
+        .carousel-slide.active { opacity: 1; }
+
         #gallery-view h2 {
-            font-weight: 300; 
-            color: #5c4a4d;
-            margin-bottom: 30px;
+            font-weight: 300; color: #5c4a4d; margin-bottom: 30px; letter-spacing: 2px;
         }
         .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 15px; 
-            max-width: 1200px; 
-            margin: 0 auto; 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+            gap: 15px; max-width: 1200px; margin: 0 auto; 
         }
         .gallery img { 
-            width: 100%; 
-            aspect-ratio: 1; /* 讓縮圖保持正方形 */
-            object-fit: cover; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            transition: transform 0.3s, box-shadow 0.3s; 
+            width: 100%; aspect-ratio: 1; object-fit: cover; 
+            border-radius: 8px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; 
+            background: white; padding: 4px; box-sizing: border-box; /* 給縮圖加一點拍立得的白色邊框感 */
         }
         .gallery img:hover { 
-            transform: scale(1.03); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15);
         }
 
         /* --------------------------
            燈箱區塊與底部縮圖 (Lightbox)
            -------------------------- */
         #lightbox { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); 
-            z-index: 1000; 
-            flex-direction: column; 
-            justify-content: space-between; 
-            align-items: center; 
+            display: none; position: fixed; top: 0; left: 0; 
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95); 
+            z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; 
         }
-        #lightbox.active { 
-            display: flex; 
-        }
+        #lightbox.active { display: flex; }
         .close-btn { 
-            position: absolute; 
-            top: 15px; 
-            right: 25px; 
-            color: white; 
-            font-size: 40px; 
-            cursor: pointer; 
-            z-index: 1001; 
+            position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; 
         }
         .lightbox-main { 
-            flex: 1; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            width: 100%; 
-            padding: 20px;
-            box-sizing: border-box;
+            flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box;
         }
         #lightbox-img { 
-            max-width: 100%; 
-            max-height: 80vh; 
-            border-radius: 4px; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            max-width: 100%; max-height: 80vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
         
-        /* 底部縮圖列 */
         .lightbox-thumbnails { 
-            display: flex; 
-            overflow-x: auto; 
-            width: 100%; 
-            padding: 15px 10px; 
-            background: rgba(20,20,20,0.8); 
-            gap: 10px; 
-            box-sizing: border-box; 
-            align-items: center; 
-            height: 120px; 
+            display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; background: rgba(20,20,20,0.8); gap: 10px; box-sizing: border-box; align-items: center; height: 120px; 
         }
         .lightbox-thumbnails img { 
-            height: 80px; 
-            min-width: 80px; 
-            object-fit: cover; 
-            cursor: pointer; 
-            opacity: 0.4; 
-            transition: opacity 0.3s, border 0.3s; 
-            border-radius: 6px; 
-            border: 2px solid transparent; 
+            height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.3s, border 0.3s; border-radius: 6px; border: 2px solid transparent; 
         }
-        .lightbox-thumbnails img.active { 
-            opacity: 1; 
-            border-color: #fff; 
-        }
-        
-        /* 美化縮圖列的捲軸 (主要針對電腦版) */
+        .lightbox-thumbnails img.active { opacity: 1; border-color: #fff; }
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
         .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #666; border-radius: 4px; }
+
+        /* 回到頂部按鈕 */
+        #backToTopBtn {
+            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; 
+        }
+        #backToTopBtn:hover { background-color: #4a3b3d; transform: translateY(-3px); }
+
+        /* 留言板區塊 */
+        #comments-section {
+            max-width: 800px; margin: 60px auto 40px auto; padding: 30px;
+            background: rgba(255, 255, 255, 0.85); /* 微微透明，透出後方光暈 */
+            backdrop-filter: blur(5px);
+            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: left;
+        }
+        #comments-section h3 {
+            text-align: center; color: #5c4a4d; margin-top: 0; margin-bottom: 20px; font-weight: 300;
+        }
+        
+        @media (max-width: 768px) {
+            #gallery-carousel { aspect-ratio: 4 / 3; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 首頁輪播區塊 -->
+    <!-- 隱藏在底層的柔和光暈裝飾 -->
+    <div class="bg-decoration dec-1"></div>
+    <div class="bg-decoration dec-2"></div>
+
+    <!-- 首頁慶祝動畫區塊 -->
     <div id="home-view">
-        <div id="carousel-container">
-            <!-- 輪播圖片會透過 JavaScript 自動產生在這裡 -->
-        </div>
-        <div class="home-content">
-            <h1>世郡 & 禾昀的婚紗相簿</h1>
-            <button class="enter-btn" onclick="enterAlbum()">進入相簿瀏覽</button>
+        <div class="celebration-content">
+            <div class="subtitle">Just Married</div>
+            <h1>世郡 & 禾昀</h1>
+            <p>感謝您的參與，與我們分享這份喜悅！</p>
+            <button class="enter-btn" onclick="enterAlbum()">翻開相簿</button>
         </div>
     </div>
 
-    <!-- 相簿網格區塊 -->
+    <!-- 相簿與留言板區塊 -->
     <div id="gallery-view">
+        <div id="gallery-carousel"></div>
         <h2>所有照片</h2>
-        <div class="gallery" id="gallery">
-            <!-- 網格縮圖會透過 JavaScript 自動產生在這裡 -->
+        <div class="gallery" id="gallery"></div>
+        <div id="comments-section">
+            <h3>留給我們的祝福</h3>
+            <div id="disqus_thread"></div>
         </div>
     </div>
 
-    <!-- 燈箱與底部縮圖區塊 -->
+    <!-- 燈箱區塊 -->
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main">
             <img id="lightbox-img" src="" alt="Enlarged photo">
         </div>
-        <!-- 底部縮圖列 -->
-        <div class="lightbox-thumbnails" id="lightbox-thumbnails">
-            <!-- 底部小圖會透過 JavaScript 自動產生在這裡 -->
-        </div>
+        <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
     </div>
 
-    <script>
-        const totalPhotos = 30; // 你的照片總數
+    <!-- 回到頂部按鈕 -->
+    <button id="backToTopBtn" onclick="scrollToTop()" title="回到最上方">↑</button>
 
-        const carouselContainer = document.getElementById('carousel-container');
+    <script>
+        // --- 產生慶祝彩帶 ---
+        const homeView = document.getElementById('home-view');
+        const colors = ['#d4a373', '#e9c46a', '#f4a261', '#e76f51', '#2a9d8f', '#a8dadc', '#ffb5a7'];
+        for (let i = 0; i < 70; i++) {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.width = Math.random() * 8 + 5 + 'px';
+            confetti.style.height = confetti.style.width;
+            confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+            confetti.style.animationDelay = Math.random() * 5 + 's';
+            if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+            homeView.appendChild(confetti);
+        }
+
+        // --- 圖片產生與邏輯 ---
+        const totalPhotos = 30; 
+        const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
         const lightboxThumbnails = document.getElementById('lightbox-thumbnails');
         const lightboxImg = document.getElementById('lightbox-img');
         const lightbox = document.getElementById('lightbox');
         
-        // 批次產生圖片元素
         for (let i = 1; i <= totalPhotos; i++) {
-            const src = `images/photo${i}.jpg`;
+            const src = `images/photo${i}.jpg`; 
             
-            // 1. 生成首頁輪播圖
-            const carouselImg = document.createElement('img');
-            carouselImg.src = src;
-            carouselImg.className = i === 1 ? 'carousel-slide active' : 'carousel-slide';
-            carouselContainer.appendChild(carouselImg);
-            
-            // 2. 生成相簿網格
             const galleryImg = document.createElement('img');
             galleryImg.src = src;
             galleryImg.loading = "lazy";
             galleryImg.onclick = () => openLightbox(i);
             gallery.appendChild(galleryImg);
             
-            // 3. 生成燈箱底部縮圖
             const thumbImg = document.createElement('img');
             thumbImg.src = src;
             thumbImg.loading = "lazy";
             thumbImg.id = `thumb-${i}`;
             thumbImg.onclick = () => showInLightbox(i);
             lightboxThumbnails.appendChild(thumbImg);
+
+            const imgObj = new Image();
+            imgObj.src = src;
+            imgObj.onload = function() {
+                if (this.naturalWidth > this.naturalHeight) {
+                    const carouselImg = document.createElement('img');
+                    carouselImg.src = src;
+                    carouselImg.className = 'carousel-slide';
+                    galleryCarousel.appendChild(carouselImg);
+                    if (galleryCarousel.children.length === 1) {
+                        carouselImg.classList.add('active');
+                    }
+                }
+            };
         }
         
-        // --- 輪播圖邏輯 ---
         let slideIndex = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        // 設定每 4 秒切換一張背景圖
         setInterval(() => {
-            slides[slideIndex].classList.remove('active');
-            slideIndex = (slideIndex + 1) % slides.length;
-            slides[slideIndex].classList.add('active');
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (slides.length > 1) {
+                slides[slideIndex % slides.length].classList.remove('active');
+                slideIndex = (slideIndex + 1) % slides.length;
+                slides[slideIndex].classList.add('active');
+            }
         }, 4000); 
         
-        // --- 頁面切換邏輯 ---
         function enterAlbum() {
+            // 首頁淡出，讓相簿顯現
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('gallery-view').style.display = 'block';
-            window.scrollTo(0, 0); // 切換時自動回到網頁最上方
+            window.scrollTo(0, 0); 
         }
         
-        // --- 燈箱邏輯 ---
         function openLightbox(index) {
             lightbox.classList.add('active');
             showInLightbox(index);
         }
-        
         function closeLightbox() {
             lightbox.classList.remove('active');
         }
         
-        // 點擊黑色背景也可以關閉燈箱
         document.querySelector('.lightbox-main').addEventListener('click', function(e) {
-            if (e.target !== lightboxImg) {
-                closeLightbox();
-            }
+            if (e.target !== lightboxImg) closeLightbox();
         });
 
-        // 在燈箱中顯示被選中的照片，並更新底部縮圖狀態
         function showInLightbox(index) {
-            // 更新上方主圖
             lightboxImg.src = `images/photo${index}.jpg`;
-            
-            // 清除所有縮圖的發亮狀態
             const thumbs = document.querySelectorAll('.lightbox-thumbnails img');
             thumbs.forEach(t => t.classList.remove('active'));
-            
-            // 讓目前點選的這張縮圖發亮
             const activeThumb = document.getElementById(`thumb-${index}`);
             activeThumb.classList.add('active');
-            
-            // 讓底部的縮圖列自動捲動，把目前的縮圖置中對齊
             activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
+
+        const backToTopBtn = document.getElementById("backToTopBtn");
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+        }
+
+        // --- Disqus 留言板載入邏輯 ---
+        var disqus_config = function () {
+            this.page.url = window.location.href;  
+            this.page.identifier = "wedding-album-2026"; 
+        };
+        (function() { 
+            var d = document, s = d.createElement('script');
+            // 請替換下方的 YOUR_DISQUS_SHORTNAME (若未替換請記得修改)
+            s.src = 'https://luo-3.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
     </script>
 </body>
 </html>
