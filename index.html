@@ -14,192 +14,114 @@
             position: relative;
         }
 
-        /* --------------------------
-           柔和光暈背景裝飾 (固定在最底層)
-           -------------------------- */
+        /* 背景裝飾 */
         .bg-decoration {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3; 
-            z-index: -1; 
-            pointer-events: none; 
+            position: fixed; border-radius: 50%; filter: blur(80px);
+            opacity: 0.3; z-index: -1; pointer-events: none; 
         }
-        .dec-1 {
-            width: 40vw; height: 40vw; background-color: #f4a261; 
-            top: -10vh; left: -10vw;
-        }
-        .dec-2 {
-            width: 50vw; height: 50vw; background-color: #a8dadc; 
-            bottom: -15vh; right: -10vw;
-        }
+        .dec-1 { width: 40vw; height: 40vw; background-color: #f4a261; top: -10vh; left: -10vw; }
+        .dec-2 { width: 50vw; height: 50vw; background-color: #a8dadc; bottom: -15vh; right: -10vw; }
 
-        /* --------------------------
-           首頁慶祝動畫區塊 (Home View)
-           -------------------------- */
+        /* 首頁 */
         #home-view { 
-            position: relative; height: 100vh; width: 100vw; 
-            overflow: hidden; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; 
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            z-index: 10; 
+            position: relative; height: 100vh; width: 100vw; overflow: hidden; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); z-index: 10; 
         }
-        
         .celebration-content { 
             z-index: 10; text-align: center; background: rgba(255, 255, 255, 0.9); 
-            padding: 50px 70px; border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            opacity: 0; transform: scale(0.8);
+            padding: 50px 70px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.8);
         }
-        @keyframes popIn {
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .celebration-content .subtitle {
-            font-size: 20px; color: #d4a373; letter-spacing: 4px;
-            margin-bottom: 10px; text-transform: uppercase;
-        }
-        .celebration-content h1 {
-            font-weight: 400; font-size: 36px; margin: 0 0 15px 0; 
-            letter-spacing: 2px; color: #5c4a4d;
-        }
-        .celebration-content p {
-            font-size: 18px; color: #777; margin-bottom: 30px; letter-spacing: 1px;
-        }
-
+        @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+        .celebration-content .subtitle { font-size: 20px; color: #d4a373; letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase; }
+        .celebration-content h1 { font-weight: 400; font-size: 36px; margin: 0 0 15px 0; letter-spacing: 2px; color: #5c4a4d; }
+        .celebration-content p { font-size: 18px; color: #777; margin-bottom: 30px; letter-spacing: 1px; }
         .enter-btn { 
-            padding: 14px 40px; font-size: 16px; cursor: pointer; 
-            background: #5c4a4d; color: white; border: none; 
-            border-radius: 30px; transition: all 0.3s ease;
-            letter-spacing: 1px; box-shadow: 0 4px 15px rgba(92, 74, 77, 0.3);
+            padding: 14px 40px; font-size: 16px; cursor: pointer; background: #5c4a4d; color: white; 
+            border: none; border-radius: 30px; transition: all 0.3s ease; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(92, 74, 77, 0.3);
         }
-        .enter-btn:hover {
-            background: #4a3b3d; transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(92, 74, 77, 0.4);
-        }
+        .enter-btn:hover { background: #4a3b3d; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(92, 74, 77, 0.4); }
 
-        .confetti {
-            position: absolute; top: -10px; width: 10px; height: 10px;
-            background-color: #f2d74e; opacity: 0; animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { opacity: 1; top: -10px; transform: translateX(0) rotate(0deg); }
-            100% { opacity: 1; top: 100vh; transform: translateX(100px) rotate(720deg); }
-        }
+        .confetti { position: absolute; top: -10px; width: 10px; height: 10px; background-color: #f2d74e; opacity: 0; animation: fall linear infinite; }
+        @keyframes fall { 0% { opacity: 1; top: -10px; transform: translateX(0) rotate(0deg); } 100% { opacity: 1; top: 100vh; transform: translateX(100px) rotate(720deg); } }
 
-        /* --------------------------
-           相簿網格與輪播區塊 (Gallery View)
-           -------------------------- */
-        #gallery-view { 
-            display: none; padding: 40px 20px; text-align: center; 
-            animation: fadeIn 0.8s ease forwards; background: transparent; 
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        /* 相簿與輪播 */
+        #gallery-view { display: none; padding: 40px 20px; text-align: center; animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* 輪播圖容器 */
         #gallery-carousel {
-            position: relative; width: 100%; max-width: 1200px;
-            aspect-ratio: 3 / 2; max-height: 80vh; 
-            margin: 0 auto 50px auto; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            background-color: rgba(255, 255, 255, 0.6); 
-            backdrop-filter: blur(10px); 
+            position: relative; width: 100%; max-width: 1200px; aspect-ratio: 3 / 2; max-height: 80vh; 
+            margin: 0 auto 50px auto; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08); background-color: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); 
         }
-        
-        /* 更新：輪播圖幻燈片排版 (支援單張與雙張並排) */
         .carousel-slide { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            padding: 10px; box-sizing: border-box; /* 讓照片與邊緣保留一點呼吸空間 */
-            opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 0; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; box-sizing: border-box; opacity: 0; transition: opacity 1.2s ease-in-out; z-index: 0; 
         }
         .carousel-slide.active { opacity: 1; z-index: 1; }
-        
-        /* 單張橫式照片滿版、不裁切 */
-        .carousel-slide img { 
-            height: 100%; width: 100%; object-fit: contain; 
-        }
-        /* 直式雙拼照片各佔一半寬度、不裁切 */
-        .carousel-slide.dual-portrait img {
-            width: calc(50% - 5px);
-        }
+        .carousel-slide img { height: 100%; width: 100%; object-fit: contain; }
+        .carousel-slide.dual-portrait img { width: calc(50% - 5px); }
 
-        #gallery-view h2 {
-            font-weight: 300; color: #5c4a4d; margin-bottom: 30px; letter-spacing: 2px;
-        }
+        /* 標題與排序按鈕列 */
+        .gallery-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 30px auto; flex-wrap: wrap; gap: 15px; }
+        .gallery-header h2 { font-weight: 300; color: #5c4a4d; margin: 0; letter-spacing: 2px; }
         
-        .gallery { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
-            gap: 15px; max-width: 1200px; margin: 0 auto; 
+        .sort-btn {
+            background: #fff; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; color: #5c4a4d;
+            font-size: 14px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .gallery img { 
-            width: 100%; aspect-ratio: 1; object-fit: cover; 
-            border-radius: 8px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; 
-            background: white; padding: 4px; box-sizing: border-box; 
-        }
-        .gallery img:hover { 
-            transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
+        .sort-btn:hover { background: #f0f0f0; border-color: #ccc; }
+        .sort-btn:disabled { opacity: 0.6; cursor: wait; }
 
-        /* --------------------------
-           燈箱區塊與底部縮圖 (Lightbox)
-           -------------------------- */
-        #lightbox { 
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: rgba(0,0,0,0.95); 
-            z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; 
-        }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+        .gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; background: white; padding: 4px; box-sizing: border-box; }
+        .gallery img:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+
+        /* 燈箱與多重互動按鈕 */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; }
         #lightbox.active { display: flex; }
-        .close-btn { 
-            position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; 
-        }
-        .lightbox-main { 
-            flex: 1; display: flex; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box;
-        }
-        #lightbox-img { 
-            max-width: 100%; max-height: 80vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
+        .close-btn { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
+        .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; }
+        #lightbox-img { max-width: 100%; max-height: 65vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         
-        .lightbox-thumbnails { 
-            display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; background: rgba(20,20,20,0.8); gap: 10px; box-sizing: border-box; align-items: center; height: 120px; 
+        .reaction-bar {
+            margin-top: 15px; display: flex; gap: 15px; background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 30px; z-index: 1002; flex-wrap: wrap; justify-content: center;
         }
-        .lightbox-thumbnails img { 
-            height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.3s, border 0.3s; border-radius: 6px; border: 2px solid transparent; 
+        .reaction-item {
+            display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 12px;
+            border-radius: 20px; background: rgba(255, 255, 255, 0.8); transition: all 0.2s ease;
+            user-select: none; border: 1px solid transparent; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+        .reaction-item:hover { transform: scale(1.05); background: #fff; }
+        .reaction-item.acted { background: #ffeaea; border-color: #ff9999; cursor: default; }
+        .reaction-item .emoji { font-size: 20px; }
+        .reaction-item .count { font-size: 14px; font-weight: bold; color: #555; }
+        .reaction-item.animate { animation: popEmoji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        @keyframes popEmoji { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+
+        .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; background: rgba(20,20,20,0.8); gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
+        .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.3s, border 0.3s; border-radius: 6px; border: 2px solid transparent; }
         .lightbox-thumbnails img.active { opacity: 1; border-color: #fff; }
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
         .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #666; border-radius: 4px; }
 
-        /* 回到頂部按鈕 */
-        #backToTopBtn {
-            display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; 
-        }
+        #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: background-color 0.3s, transform 0.3s; }
         #backToTopBtn:hover { background-color: #4a3b3d; transform: translateY(-3px); }
         
-        /* --------------------------
-           行動裝置專屬優化 (Media Query)
-           -------------------------- */
         @media (max-width: 768px) {
-            #gallery-carousel { aspect-ratio: 4 / 3; margin-bottom: 30px; }
+            #gallery-carousel { aspect-ratio: 4 / 3; margin-bottom: 20px; }
             #gallery-view { padding: 20px 10px; }
-            
-            .gallery { 
-                grid-template-columns: repeat(3, 1fr); 
-                gap: 5px; 
-            }
-            .gallery img {
-                padding: 2px; border-radius: 4px; 
-            }
-            
+            .gallery-header { flex-direction: column; margin-bottom: 20px; }
+            .gallery { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+            .gallery img { padding: 2px; border-radius: 4px; }
             .celebration-content { padding: 40px 30px; }
             .celebration-content h1 { font-size: 28px; }
-            .celebration-content p { font-size: 15px; }
+            #lightbox-img { max-height: 55vh; }
+            .reaction-item { padding: 4px 10px; }
+            .reaction-item .emoji { font-size: 16px; }
+            .reaction-item .count { font-size: 12px; }
         }
     </style>
 </head>
@@ -218,21 +140,41 @@
     </div>
 
     <div id="gallery-view">
-        <!-- 輪播圖 -->
         <div id="gallery-carousel"></div>
-        <h2>所有照片</h2>
+        
+        <!-- 標題與排序按鈕 -->
+        <div class="gallery-header">
+            <h2>所有照片</h2>
+            <button class="sort-btn" id="sort-btn" onclick="sortGalleryByPopularity()">
+                🔥 依熱門度排序
+            </button>
+        </div>
+        
         <div class="gallery" id="gallery"></div>
     </div>
 
+    <!-- 燈箱與表情互動區塊 -->
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
-        <div class="lightbox-main">
+        <div class="lightbox-main" id="lightbox-main-area">
             <img id="lightbox-img" src="" alt="Enlarged photo">
+            
+            <div class="reaction-bar">
+                <div class="reaction-item" id="react-like" onclick="handleReaction('like')">
+                    <span class="emoji">👍</span> <span class="count" id="count-like">0</span>
+                </div>
+                <div class="reaction-item" id="react-love" onclick="handleReaction('love')">
+                    <span class="emoji">❤️</span> <span class="count" id="count-love">0</span>
+                </div>
+                <div class="reaction-item" id="react-party" onclick="handleReaction('party')">
+                    <span class="emoji">🎉</span> <span class="count" id="count-party">0</span>
+                </div>
+            </div>
         </div>
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
     </div>
 
-    <button id="backToTopBtn" onclick="scrollToTop()" title="回到最上方">↑</button>
+    <button id="backToTopBtn" onclick="scrollToTop()">↑</button>
 
     <script>
         // --- 產生慶祝彩帶 ---
@@ -251,7 +193,6 @@
             homeView.appendChild(confetti);
         }
 
-        // --- 圖片產生與分組邏輯 ---
         const totalPhotos = 30; 
         const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
@@ -259,14 +200,16 @@
         const lightboxImg = document.getElementById('lightbox-img');
         const lightbox = document.getElementById('lightbox');
         
+        let currentPhotoIndex = 1; 
         const imagePromises = [];
 
+        // --- 初始化照片 ---
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
-            // 1. 快速產生下方相簿網格與縮圖
             const galleryImg = document.createElement('img');
             galleryImg.src = src;
+            galleryImg.id = `gallery-img-${i}`; // 加上 ID 以利後續排序抓取
             galleryImg.loading = "lazy";
             galleryImg.onclick = () => openLightbox(i);
             gallery.appendChild(galleryImg);
@@ -278,36 +221,25 @@
             thumbImg.onclick = () => showInLightbox(i);
             lightboxThumbnails.appendChild(thumbImg);
 
-            // 2. 利用 Promise 非同步檢查圖片尺寸方向
             const promise = new Promise((resolve) => {
                 const imgObj = new Image();
-                imgObj.onload = function() {
-                    resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight });
-                };
-                imgObj.onerror = function() {
-                    resolve(null); // 若檔案缺失不中斷程式
-                };
+                imgObj.onload = function() { resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight }); };
+                imgObj.onerror = function() { resolve(null); };
                 imgObj.src = src;
             });
             imagePromises.push(promise);
         }
         
-        // 等待所有照片尺寸檢查完畢後，再處理輪播圖排版
+        // --- 處理輪播圖排版 ---
         Promise.all(imagePromises).then((results) => {
             const landscapes = [];
             const portraits = [];
-
-            // 分類橫式與直式照片
             results.forEach(res => {
-                if (res) {
-                    if (res.isLandscape) landscapes.push(res.src);
-                    else portraits.push(res.src);
-                }
+                if (res) { if (res.isLandscape) landscapes.push(res.src); else portraits.push(res.src); }
             });
 
             const slidesElements = [];
 
-            // 處理橫式照片 (單張)
             landscapes.forEach(src => {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide';
@@ -318,42 +250,30 @@
                 slidesElements.push(slide);
             });
 
-            // 處理直式照片 (兩張併為一組)
             for (let i = 0; i < portraits.length; i += 2) {
                 const slide = document.createElement('div');
                 slide.className = 'carousel-slide dual-portrait';
-
                 const img1 = document.createElement('img');
                 img1.src = portraits[i];
                 slide.appendChild(img1);
-
-                // 如果還有下一張直式照片，就併在一起
                 if (i + 1 < portraits.length) {
                     const img2 = document.createElement('img');
                     img2.src = portraits[i + 1];
                     slide.appendChild(img2);
                 }
-                
                 galleryCarousel.appendChild(slide);
                 slidesElements.push(slide);
             }
 
-            // --- 開始執行隨機輪播 ---
             if (slidesElements.length > 0) {
-                // 網頁載入時，第一張顯示的照片也「隨機抽籤」決定
                 let currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
                 slidesElements[currentCarouselIndex].classList.add('active');
 
-                // 設定計時器，每 4 秒切換到下一張隨機照片
                 setInterval(() => {
                     if (slidesElements.length > 1) {
                         slidesElements.forEach(slide => slide.classList.remove('active'));
-                        
                         let nextIndex;
-                        do {
-                            nextIndex = Math.floor(Math.random() * slidesElements.length);
-                        } while (nextIndex === currentCarouselIndex); // 確保不會抽到重複的
-                        
+                        do { nextIndex = Math.floor(Math.random() * slidesElements.length); } while (nextIndex === currentCarouselIndex);
                         currentCarouselIndex = nextIndex;
                         slidesElements[currentCarouselIndex].classList.add('active');
                     }
@@ -361,14 +281,12 @@
             }
         });
         
-        // --- 頁面切換 ---
         function enterAlbum() {
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('gallery-view').style.display = 'block';
             window.scrollTo(0, 0); 
         }
         
-        // --- 燈箱控制 ---
         function openLightbox(index) {
             lightbox.classList.add('active');
             showInLightbox(index);
@@ -377,17 +295,111 @@
             lightbox.classList.remove('active');
         }
         
-        document.querySelector('.lightbox-main').addEventListener('click', function(e) {
-            if (e.target !== lightboxImg) closeLightbox();
+        document.getElementById('lightbox-main-area').addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
         });
 
         function showInLightbox(index) {
+            currentPhotoIndex = index;
             lightboxImg.src = `images/photo${index}.jpg`;
+            
             const thumbs = document.querySelectorAll('.lightbox-thumbnails img');
             thumbs.forEach(t => t.classList.remove('active'));
             const activeThumb = document.getElementById(`thumb-${index}`);
             activeThumb.classList.add('active');
             activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
+            fetchReactions(index);
+        }
+
+        // --- 多重互動表情邏輯 ---
+        const namespace = "shijun_heyun_reactions_2026"; 
+        const reactionTypes = ['like', 'love', 'party'];
+
+        function fetchReactions(photoId) {
+            reactionTypes.forEach(type => {
+                const countEl = document.getElementById(`count-${type}`);
+                const btnEl = document.getElementById(`react-${type}`);
+                
+                // 讀取數量
+                fetch(`https://api.countapi.xyz/get/${namespace}/p${photoId}_${type}`)
+                    .then(res => res.json())
+                    .then(data => { countEl.innerText = data.value || 0; })
+                    .catch(() => { countEl.innerText = 0; });
+
+                // 檢查是否已點過
+                if (localStorage.getItem(`reacted_p${photoId}_${type}`)) {
+                    btnEl.classList.add('acted');
+                } else {
+                    btnEl.classList.remove('acted');
+                }
+            });
+        }
+
+        function handleReaction(type) {
+            const photoId = currentPhotoIndex;
+            const btnEl = document.getElementById(`react-${type}`);
+            const countEl = document.getElementById(`count-${type}`);
+
+            if (localStorage.getItem(`reacted_p${photoId}_${type}`)) return;
+
+            btnEl.classList.add('animate');
+            setTimeout(() => btnEl.classList.remove('animate'), 400);
+
+            // 更新單一表情數量
+            fetch(`https://api.countapi.xyz/hit/${namespace}/p${photoId}_${type}`)
+                .then(res => res.json())
+                .then(data => {
+                    countEl.innerText = data.value;
+                    btnEl.classList.add('acted');
+                    localStorage.setItem(`reacted_p${photoId}_${type}`, 'true');
+                    
+                    // 同步更新「總熱門度」計數器 (用於排序)
+                    fetch(`https://api.countapi.xyz/hit/${namespace}/p${photoId}_total`).catch(e=>{});
+                })
+                .catch(err => console.log('Reaction failed', err));
+        }
+
+        // --- 總熱門度排序功能 ---
+        async function sortGalleryByPopularity() {
+            const btn = document.getElementById('sort-btn');
+            btn.innerHTML = "⏳ 計算熱門度中...";
+            btn.disabled = true;
+
+            const promises = [];
+            // 背景非同步抓取 30 張照片的總互動數
+            for (let i = 1; i <= totalPhotos; i++) {
+                promises.push(
+                    fetch(`https://api.countapi.xyz/get/${namespace}/p${i}_total`)
+                    .then(res => res.json())
+                    .then(data => ({ id: i, count: data.value || 0 }))
+                    .catch(() => ({ id: i, count: 0 }))
+                );
+            }
+
+            try {
+                const results = await Promise.all(promises);
+                // 依照總互動數從大到小排序
+                results.sort((a, b) => b.count - a.count);
+
+                // 根據排序結果，將相簿網格中的圖片重新排列
+                const galleryContainer = document.getElementById('gallery');
+                results.forEach(res => {
+                    const imgElement = document.getElementById(`gallery-img-${res.id}`);
+                    if (imgElement) {
+                        galleryContainer.appendChild(imgElement); // 自動移至容器末端
+                    }
+                });
+
+                btn.innerHTML = "✅ 已按熱門度排序";
+            } catch (error) {
+                btn.innerHTML = "❌ 排序失敗";
+            }
+
+            setTimeout(() => {
+                btn.innerHTML = "🔥 重新排序";
+                btn.disabled = false;
+            }, 3000);
         }
 
         // --- 回到頂部按鈕 ---
@@ -399,10 +411,7 @@
                 backToTopBtn.style.display = "none";
             }
         };
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
-        }
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     </script>
 </body>
 </html>
