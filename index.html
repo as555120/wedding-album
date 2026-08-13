@@ -61,45 +61,19 @@
         .carousel-slide img { height: 100%; width: 100%; object-fit: contain; }
         .carousel-slide.dual-portrait img { width: calc(50% - 5px); }
 
-        /* 標題與排序按鈕列 */
-        .gallery-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 30px auto; flex-wrap: wrap; gap: 15px; }
-        .gallery-header h2 { font-weight: 300; color: #5c4a4d; margin: 0; letter-spacing: 2px; }
+        #gallery-view h2 { font-weight: 300; color: #5c4a4d; margin-bottom: 30px; letter-spacing: 2px; }
         
-        .sort-btn {
-            background: #fff; border: 1px solid #ddd; padding: 8px 16px; border-radius: 20px; color: #5c4a4d;
-            font-size: 14px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .sort-btn:hover { background: #f0f0f0; border-color: #ccc; }
-        .sort-btn:disabled { opacity: 0.6; cursor: wait; }
-
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
         .gallery img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; background: white; padding: 4px; box-sizing: border-box; }
         .gallery img:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
 
-        /* 燈箱與多重互動按鈕 */
+        /* 燈箱區塊 */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; }
         #lightbox.active { display: flex; }
         .close-btn { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
         .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; }
-        #lightbox-img { max-width: 100%; max-height: 65vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
         
-        .reaction-bar {
-            margin-top: 15px; display: flex; gap: 15px; background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 30px; z-index: 1002; flex-wrap: wrap; justify-content: center;
-        }
-        .reaction-item {
-            display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 6px 12px;
-            border-radius: 20px; background: rgba(255, 255, 255, 0.8); transition: all 0.2s ease;
-            user-select: none; border: 1px solid transparent; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .reaction-item:hover { transform: scale(1.05); background: #fff; }
-        .reaction-item.acted { background: #ffeaea; border-color: #ff9999; cursor: default; }
-        .reaction-item .emoji { font-size: 20px; }
-        .reaction-item .count { font-size: 14px; font-weight: bold; color: #555; }
-        .reaction-item.animate { animation: popEmoji 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
-        @keyframes popEmoji { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-
         .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; background: rgba(20,20,20,0.8); gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
         .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.3s, border 0.3s; border-radius: 6px; border: 2px solid transparent; }
         .lightbox-thumbnails img.active { opacity: 1; border-color: #fff; }
@@ -113,15 +87,11 @@
         @media (max-width: 768px) {
             #gallery-carousel { aspect-ratio: 4 / 3; margin-bottom: 20px; }
             #gallery-view { padding: 20px 10px; }
-            .gallery-header { flex-direction: column; margin-bottom: 20px; }
             .gallery { grid-template-columns: repeat(3, 1fr); gap: 5px; }
             .gallery img { padding: 2px; border-radius: 4px; }
             .celebration-content { padding: 40px 30px; }
             .celebration-content h1 { font-size: 28px; }
-            #lightbox-img { max-height: 55vh; }
-            .reaction-item { padding: 4px 10px; }
-            .reaction-item .emoji { font-size: 16px; }
-            .reaction-item .count { font-size: 12px; }
+            #lightbox-img { max-height: 65vh; }
         }
     </style>
 </head>
@@ -141,35 +111,15 @@
 
     <div id="gallery-view">
         <div id="gallery-carousel"></div>
-        
-        <!-- 標題與排序按鈕 -->
-        <div class="gallery-header">
-            <h2>所有照片</h2>
-            <button class="sort-btn" id="sort-btn" onclick="sortGalleryByPopularity()">
-                🔥 依熱門度排序
-            </button>
-        </div>
-        
+        <h2>所有照片</h2>
         <div class="gallery" id="gallery"></div>
     </div>
 
-    <!-- 燈箱與表情互動區塊 -->
+    <!-- 燈箱區塊 -->
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main" id="lightbox-main-area">
             <img id="lightbox-img" src="" alt="Enlarged photo">
-            
-            <div class="reaction-bar">
-                <div class="reaction-item" id="react-like" onclick="handleReaction('like')">
-                    <span class="emoji">👍</span> <span class="count" id="count-like">0</span>
-                </div>
-                <div class="reaction-item" id="react-love" onclick="handleReaction('love')">
-                    <span class="emoji">❤️</span> <span class="count" id="count-love">0</span>
-                </div>
-                <div class="reaction-item" id="react-party" onclick="handleReaction('party')">
-                    <span class="emoji">🎉</span> <span class="count" id="count-party">0</span>
-                </div>
-            </div>
         </div>
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
     </div>
@@ -200,7 +150,6 @@
         const lightboxImg = document.getElementById('lightbox-img');
         const lightbox = document.getElementById('lightbox');
         
-        let currentPhotoIndex = 1; 
         const imagePromises = [];
 
         // --- 初始化照片 ---
@@ -209,7 +158,6 @@
             
             const galleryImg = document.createElement('img');
             galleryImg.src = src;
-            galleryImg.id = `gallery-img-${i}`; 
             galleryImg.loading = "lazy";
             galleryImg.onclick = () => openLightbox(i);
             gallery.appendChild(galleryImg);
@@ -300,7 +248,6 @@
         });
 
         function showInLightbox(index) {
-            currentPhotoIndex = index;
             lightboxImg.src = `images/photo${index}.jpg`;
             
             const thumbs = document.querySelectorAll('.lightbox-thumbnails img');
@@ -308,106 +255,6 @@
             const activeThumb = document.getElementById(`thumb-${index}`);
             activeThumb.classList.add('active');
             activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-
-            fetchReactions(index);
-        }
-
-        // --- 多重互動表情邏輯 (改用全新穩定的 CounterAPI) ---
-        const namespace = "shijun_heyun_2026"; 
-        const reactionTypes = ['like', 'love', 'party'];
-
-        function fetchReactions(photoId) {
-            reactionTypes.forEach(type => {
-                const countEl = document.getElementById(`count-${type}`);
-                const btnEl = document.getElementById(`react-${type}`);
-                
-                // 向 CounterAPI 讀取目前的數量
-                fetch(`https://api.counterapi.dev/v1/${namespace}/p${photoId}_${type}`)
-                    .then(res => res.json())
-                    .then(data => { countEl.innerText = data.count || 0; })
-                    .catch(() => { countEl.innerText = 0; });
-
-                // 檢查瀏覽器是否已記錄點擊過
-                if (localStorage.getItem(`reacted_p${photoId}_${type}`)) {
-                    btnEl.classList.add('acted');
-                } else {
-                    btnEl.classList.remove('acted');
-                }
-            });
-        }
-
-        function handleReaction(type) {
-            const photoId = currentPhotoIndex;
-            const btnEl = document.getElementById(`react-${type}`);
-            const countEl = document.getElementById(`count-${type}`);
-
-            // 如果本機已經點過，就不做任何反應
-            if (localStorage.getItem(`reacted_p${photoId}_${type}`)) return;
-
-            // 1. 樂觀更新：立刻讓畫面特效與數字 +1 (不等伺服器回應)
-            btnEl.classList.add('animate');
-            setTimeout(() => btnEl.classList.remove('animate'), 400);
-
-            let currentCount = parseInt(countEl.innerText) || 0;
-            countEl.innerText = currentCount + 1;
-            btnEl.classList.add('acted');
-            
-            // 記錄在瀏覽器，防止重新整理後重複點擊
-            localStorage.setItem(`reacted_p${photoId}_${type}`, 'true');
-
-            // 2. 背景發送數據到計數伺服器
-            fetch(`https://api.counterapi.dev/v1/${namespace}/p${photoId}_${type}/up`)
-                .then(res => res.json())
-                .then(data => {
-                    // 如果伺服器成功回傳，以真實總數為準校正
-                    if (data.count !== undefined) countEl.innerText = data.count;
-                    
-                    // 同步更新「總熱門度」計數器 (用於排序功能)
-                    fetch(`https://api.counterapi.dev/v1/${namespace}/p${photoId}_total/up`).catch(e=>{});
-                })
-                .catch(err => console.log('計數伺服器連線異常，但本地數量已更新', err));
-        }
-
-        // --- 總熱門度排序功能 ---
-        async function sortGalleryByPopularity() {
-            const btn = document.getElementById('sort-btn');
-            btn.innerHTML = "⏳ 計算熱門度中...";
-            btn.disabled = true;
-
-            const promises = [];
-            // 背景非同步抓取 30 張照片的總互動數
-            for (let i = 1; i <= totalPhotos; i++) {
-                promises.push(
-                    fetch(`https://api.counterapi.dev/v1/${namespace}/p${i}_total`)
-                    .then(res => res.json())
-                    .then(data => ({ id: i, count: data.count || 0 }))
-                    .catch(() => ({ id: i, count: 0 }))
-                );
-            }
-
-            try {
-                const results = await Promise.all(promises);
-                // 依照總互動數從大到小排序
-                results.sort((a, b) => b.count - a.count);
-
-                // 根據排序結果，將相簿網格中的圖片重新排列
-                const galleryContainer = document.getElementById('gallery');
-                results.forEach(res => {
-                    const imgElement = document.getElementById(`gallery-img-${res.id}`);
-                    if (imgElement) {
-                        galleryContainer.appendChild(imgElement); // 自動移至容器末端
-                    }
-                });
-
-                btn.innerHTML = "✅ 已按熱門度排序";
-            } catch (error) {
-                btn.innerHTML = "❌ 排序失敗";
-            }
-
-            setTimeout(() => {
-                btn.innerHTML = "🔥 重新排序";
-                btn.disabled = false;
-            }, 3000);
         }
 
         // --- 回到頂部按鈕 ---
