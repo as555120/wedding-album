@@ -15,13 +15,22 @@
         }
 
         /* --------------------------
-           新增：開門動畫區塊
+           新增：全站圖片防下載、防拖曳、防選取
            -------------------------- */
+        img {
+            -webkit-user-drag: none; /* 禁用滑鼠拖曳 */
+            user-select: none; /* 禁用選取 */
+            -webkit-user-select: none; 
+            -webkit-touch-callout: none; /* 禁用 iOS 長按跳出下載選單 */
+            pointer-events: auto; 
+        }
+
+        /* 開門動畫區塊 */
         #door-container {
             position: fixed; top: 0; left: 0; 
             width: 100vw; height: 100vh;
             z-index: 9999; display: flex; 
-            pointer-events: none; /* 確保不會阻擋點擊 */
+            pointer-events: none; 
         }
         .door {
             width: 50%; height: 100%; 
@@ -33,7 +42,6 @@
         .door-left { border-right: 2px solid #d4a373; }
         .door-right { border-left: 2px solid #d4a373; }
         
-        /* 門上的簡單裝飾線條 */
         .door::before {
             content: ''; position: absolute;
             width: 10px; height: 60px; background-color: #d4a373;
@@ -62,7 +70,7 @@
             z-index: 10; text-align: center; background: rgba(255, 255, 255, 0.9); 
             padding: 50px 70px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.8);
-            animation-delay: 0.5s; /* 配合開門動畫稍作延遲 */
+            animation-delay: 0.5s; 
         }
         @keyframes popIn { to { opacity: 1; transform: scale(1); } }
         .celebration-content .subtitle { font-size: 20px; color: #d4a373; letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase; }
@@ -99,14 +107,19 @@
         .gallery img:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
 
         /* 燈箱區塊 */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; touch-action: pan-y; /* 避免預設左右滑動干擾 */ }
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; touch-action: pan-y; }
         #lightbox.active { display: flex; }
         .close-btn { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
         
         .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; position: relative; }
-        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); user-select: none; }
         
-        /* 左右切換提示 (主要為電腦版準備，手機可直接滑) */
+        #lightbox-img { 
+            max-width: 100%; max-height: 75vh; border-radius: 4px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+            cursor: pointer; /* 讓大圖滑鼠變成手指形狀，提示可點擊 */
+        }
+        
+        /* 電腦版左右切換按鈕 */
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             color: rgba(255,255,255,0.6); font-size: 40px; cursor: pointer;
@@ -135,7 +148,7 @@
             .celebration-content { padding: 40px 30px; }
             .celebration-content h1 { font-size: 28px; }
             #lightbox-img { max-height: 65vh; }
-            .nav-btn { display: none; /* 手機版隱藏按鈕，靠滑動 */ }
+            .nav-btn { display: none; }
         }
     </style>
 </head>
@@ -152,9 +165,9 @@
 
     <div id="home-view">
         <div class="celebration-content">
-            <div class="subtitle">We Got Married!</div>
+            <div class="subtitle">Just Married</div>
             <h1>世郡 & 禾昀</h1>
-            <p>與您分享這份喜悅！</p>
+            <p>感謝您的參與，與我們分享這份喜悅！</p>
             <button class="enter-btn" onclick="enterAlbum()">翻開相簿</button>
         </div>
     </div>
@@ -169,7 +182,6 @@
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main" id="lightbox-main-area">
-            <!-- 電腦版左右切換按鈕 -->
             <button class="nav-btn nav-left" onclick="prevPhoto(event)">&#10094;</button>
             <img id="lightbox-img" src="" alt="Enlarged photo">
             <button class="nav-btn nav-right" onclick="nextPhoto(event)">&#10095;</button>
@@ -180,16 +192,18 @@
     <button id="backToTopBtn" onclick="scrollToTop()">↑</button>
 
     <script>
+        // --- 全站禁用右鍵選單 (防另存圖片) ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
         // --- 開門動畫觸發 ---
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.querySelector('.door-left').classList.add('open');
                 document.querySelector('.door-right').classList.add('open');
-                // 動畫結束後隱藏門，避免阻擋點擊
                 setTimeout(() => {
                     document.getElementById('door-container').style.display = 'none';
                 }, 1500);
-            }, 300); // 延遲 0.3 秒，讓載入更平順
+            }, 300); 
         });
 
         // --- 產生慶祝彩帶 ---
@@ -215,7 +229,7 @@
         const lightboxImg = document.getElementById('lightbox-img');
         const lightbox = document.getElementById('lightbox');
         
-        let currentPhotoIndex = 1; // 記錄目前燈箱顯示的照片編號
+        let currentPhotoIndex = 1; 
         const imagePromises = [];
 
         // --- 初始化照片 ---
@@ -309,13 +323,12 @@
             lightbox.classList.remove('active');
         }
         
-        // 點擊背景關閉 (排除按鈕與照片本身)
         document.getElementById('lightbox-main-area').addEventListener('click', function(e) {
             if (e.target === this) closeLightbox();
         });
 
         function showInLightbox(index) {
-            currentPhotoIndex = index; // 更新全域變數
+            currentPhotoIndex = index; 
             lightboxImg.src = `images/photo${index}.jpg`;
             
             const thumbs = document.querySelectorAll('.lightbox-thumbnails img');
@@ -325,7 +338,22 @@
             activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
-        // --- 新增：滑動與按鈕切換邏輯 ---
+        // --- 點擊大圖左右半邊進行切換 ---
+        lightboxImg.addEventListener('click', function(e) {
+            e.stopPropagation(); // 防止事件冒泡關閉燈箱
+            const rect = this.getBoundingClientRect();
+            // 計算點擊位置 (滑鼠點擊的 X 座標減去圖片最左側的 X 座標)
+            const clickX = e.clientX - rect.left;
+            
+            // 如果點擊位置大於圖片寬度的一半，就是點擊右邊；反之則是左邊
+            if (clickX > rect.width / 2) {
+                nextPhoto();
+            } else {
+                prevPhoto();
+            }
+        });
+
+        // --- 滑動與按鈕切換邏輯 ---
         function nextPhoto(e) {
             if(e) e.stopPropagation();
             let nextIndex = currentPhotoIndex + 1;
@@ -340,7 +368,6 @@
             showInLightbox(prevIndex);
         }
 
-        // 手機觸控滑動偵測
         let touchstartX = 0;
         let touchendX = 0;
         
@@ -354,13 +381,11 @@
         }, {passive: true});
 
         function handleSwipe() {
-            const swipeThreshold = 40; // 設定滑動的最小距離門檻
+            const swipeThreshold = 40; 
             if (touchendX < touchstartX - swipeThreshold) {
-                // 向左滑，顯示下一張
                 nextPhoto();
             }
             if (touchendX > touchstartX + swipeThreshold) {
-                // 向右滑，顯示上一張
                 prevPhoto();
             }
         }
