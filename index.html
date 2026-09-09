@@ -34,25 +34,8 @@
         .dec-2 { width: 50vw; height: 50vw; background-color: #a8dadc; bottom: -15vh; right: -10vw; }
 
         /* =========================================
-           開門動畫與首頁
+           首頁區塊
            ========================================= */
-        #door-container {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: 9999; display: flex; pointer-events: none; 
-        }
-        .door {
-            width: 50%; height: 100%; background-color: #fdfbfb; 
-            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-            position: relative; display: flex; justify-content: center; align-items: center;
-        }
-        .door-left { border-right: 2px solid #d4a373; }
-        .door-right { border-left: 2px solid #d4a373; }
-        .door::before { content: ''; position: absolute; top: 50%; width: 10px; height: 60px; background-color: #d4a373; transform: translateY(-50%); }
-        .door-left::before { right: 20px; }
-        .door-right::before { left: 20px; }
-        .door-left.open { transform: translateX(-100%); }
-        .door-right.open { transform: translateX(100%); }
-
         #home-view { 
             position: relative; height: 100vh; width: 100vw; overflow: hidden; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; 
@@ -62,7 +45,6 @@
             z-index: 10; text-align: center; background: rgba(255, 255, 255, 0.9); 
             padding: 50px 70px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);
             animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.8);
-            animation-delay: 0.5s; 
         }
         @keyframes popIn { to { opacity: 1; transform: scale(1); } }
         .celebration-content .subtitle { font-size: 20px; color: #d4a373; letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase; }
@@ -210,12 +192,6 @@
 </head>
 <body>
 
-    <!-- 開門動畫區塊 -->
-    <div id="door-container">
-        <div class="door door-left"></div>
-        <div class="door door-right"></div>
-    </div>
-
     <!-- 隱藏的背景光暈 -->
     <div class="bg-decoration dec-1"></div>
     <div class="bg-decoration dec-2"></div>
@@ -271,17 +247,6 @@
     <script>
         // --- 全站防拷貝設定 ---
         document.addEventListener('contextmenu', event => event.preventDefault());
-
-        // --- 開門動畫觸發 ---
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.querySelector('.door-left').classList.add('open');
-                document.querySelector('.door-right').classList.add('open');
-                setTimeout(() => {
-                    document.getElementById('door-container').style.display = 'none';
-                }, 1500);
-            }, 300); 
-        });
 
         // --- 產生首頁慶祝彩帶 ---
         const homeView = document.getElementById('home-view');
