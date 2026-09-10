@@ -17,20 +17,16 @@
             overflow-x: hidden;
         }
 
-        /* --- 新增：全站圖片載入平滑過場特效 --- */
+        /* 圖片防下載與淡入過場特效 */
         img {
             -webkit-user-drag: none; 
             user-select: none; 
             -webkit-user-select: none; 
             -webkit-touch-callout: none; 
-            opacity: 0; /* 預設完全透明，隱藏黑白未載入完成的狀態 */
+            opacity: 0; 
             transition: opacity 0.4s ease-in-out; 
         }
-        
-        /* 當圖片 100% 載入完成後，透過 JS 加上 loaded class 淡入顯示 */
-        img.loaded {
-            opacity: 1;
-        }
+        img.loaded { opacity: 1; }
 
         /* 背景裝飾 */
         .bg-decoration {
@@ -92,16 +88,11 @@
         }
         .gallery img.loaded:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
 
-        /* --- 針對燈箱底部縮圖的透明度特殊設定 --- */
+        /* 縮圖樣式 */
         .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
-        
-        .lightbox-thumbnails img { 
-            height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; 
-            border-radius: 6px; border: 2px solid transparent; pointer-events: auto; 
-            transition: opacity 0.4s ease-in-out, border 0.3s; 
-        }
-        .lightbox-thumbnails img.loaded { opacity: 0.4; } /* 未選中的縮圖半透明 */
-        .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #fff; } /* 選中的縮圖全亮 */
+        .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; border-radius: 6px; border: 2px solid transparent; pointer-events: auto; transition: opacity 0.4s ease-in-out, border 0.3s; }
+        .lightbox-thumbnails img.loaded { opacity: 0.4; } 
+        .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #fff; } 
         
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
         .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
@@ -116,11 +107,7 @@
         
         .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; position: relative; }
         
-        #lightbox-img { 
-            max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
-            cursor: pointer; pointer-events: auto;
-        }
-
+        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); cursor: pointer; pointer-events: auto; }
         #lightbox .lightbox-thumbnails { background: rgba(20,20,20,0.8); }
 
         /* =========================================
@@ -133,66 +120,31 @@
         }
         #flipbook-modal.active { display: flex; animation: fadeIn 0.4s ease forwards;}
         
-        #book-wrapper {
-            position: relative; width: 85vw; max-width: 1200px; aspect-ratio: 1.6; perspective: 1500px; 
-        }
-        .paper {
-            position: absolute; width: 50%; height: 100%; top: 0; right: 0; 
-            transform-style: preserve-3d; transform-origin: left center; 
-            transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); cursor: pointer;
-        }
+        #book-wrapper { position: relative; width: 85vw; max-width: 1200px; aspect-ratio: 1.6; perspective: 1500px; }
+        .paper { position: absolute; width: 50%; height: 100%; top: 0; right: 0; transform-style: preserve-3d; transform-origin: left center; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); cursor: pointer; }
         .paper.flipped { transform: rotateY(-180deg); }
-        .face {
-            position: absolute; width: 100%; height: 100%; backface-visibility: hidden; 
-            background-color: #fff; box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1);
-            border-radius: 4px; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; overflow: hidden;
-        }
+        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background-color: #fff; box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1); border-radius: 4px; display: flex; justify-content: center; align-items: center; padding: 15px; box-sizing: border-box; overflow: hidden; }
         .front { box-shadow: inset 20px 0 30px -10px rgba(0,0,0,0.08); }
         .back { transform: rotateY(180deg); box-shadow: inset -20px 0 30px -10px rgba(0,0,0,0.08); }
         
         .face img { width: 100%; height: 100%; object-fit: contain; background-color: #fafafa; pointer-events: none; }
-
         .cover-content { text-align: center; padding: 20px; }
         .cover-content .subtitle { font-size: 16px; color: #d4a373; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; }
         .cover-content h1 { font-weight: 400; font-size: 32px; letter-spacing: 2px; color: #5c4a4d; margin: 0 0 15px 0; }
         .cover-content p { color: #777; font-size: 14px; letter-spacing: 2px; }
 
-        .flipbook-bottom-trigger {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1000;
-        }
-        
+        .flipbook-bottom-trigger { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1000; }
         .flipbook-bottom-area {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: rgba(0,0,0,0.85);
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-            z-index: 1001; display: flex; flex-direction: column; align-items: center;
-            padding-bottom: 15px; 
+            position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.85); opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease; z-index: 1001; display: flex; flex-direction: column; align-items: center; padding-bottom: 15px; 
         }
-        
-        .flipbook-bottom-trigger:hover + .flipbook-bottom-area,
-        .flipbook-bottom-area:hover { opacity: 1; visibility: visible; }
-        
-        .book-controls {
-            display: flex; gap: 20px; align-items: center; color: white;
-            padding: 12px 0; margin-bottom: 5px;
-        }
+        .flipbook-bottom-trigger:hover + .flipbook-bottom-area, .flipbook-bottom-area:hover { opacity: 1; visibility: visible; }
+        .book-controls { display: flex; gap: 20px; align-items: center; color: white; padding: 12px 0; margin-bottom: 5px; }
         .instruction { color: #ccc; font-size: 14px; letter-spacing: 1px; }
-        
-        #flipbook-counter {
-            background: rgba(255,255,255,0.2); padding: 5px 15px; 
-            border-radius: 20px; font-size: 14px; letter-spacing: 1px; font-weight: bold;
-        }
-
-        /* =========================================
-           回到頂部按鈕
-           ========================================= */
+        #flipbook-counter { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
         #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; outline: none; }
         #backToTopBtn:hover { background: #4a3b3d; transform: translateY(-3px); }
 
-        /* =========================================
-           行動裝置響應式優化
-           ========================================= */
         @media (max-width: 768px) {
             #gallery-carousel { aspect-ratio: 4 / 3; margin-bottom: 20px; }
             .gallery { grid-template-columns: repeat(3, 1fr); gap: 5px; }
@@ -205,11 +157,9 @@
 </head>
 <body>
 
-    <!-- 隱藏的背景光暈 -->
     <div class="bg-decoration dec-1"></div>
     <div class="bg-decoration dec-2"></div>
 
-    <!-- 首頁區塊 -->
     <div id="home-view">
         <div class="celebration-content">
             <div class="subtitle">We Got Married</div>
@@ -219,14 +169,12 @@
         </div>
     </div>
 
-    <!-- 主相簿網格區塊 -->
     <div id="main-content">
         <div id="gallery-carousel"></div>
         <h2>所有照片</h2>
         <div class="gallery" id="gallery"></div>
     </div>
 
-    <!-- 彈窗 1：手機版專用傳統燈箱 -->
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main" id="lightbox-main-area">
@@ -235,17 +183,10 @@
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
     </div>
 
-    <!-- 彈窗 2：電腦版專用 3D 相本 -->
     <div id="flipbook-modal">
         <span class="close-btn" onclick="closeFlipbookModal()">&times;</span>
-        
-        <!-- 相本主體 -->
         <div id="book-wrapper"></div>
-        
-        <!-- 感應區：用於觸發淡出淡入特效 -->
         <div class="flipbook-bottom-trigger"></div>
-
-        <!-- 底部滑鼠感應抽屜 -->
         <div class="flipbook-bottom-area">
             <div class="book-controls">
                 <span class="instruction">👈 點擊相本左側翻回上一頁 ｜ 點擊右側翻到下一頁 👉</span>
@@ -258,10 +199,8 @@
     <button id="backToTopBtn" onclick="scrollToTop()">↑</button>
 
     <script>
-        // --- 全站防拷貝設定 ---
         document.addEventListener('contextmenu', event => event.preventDefault());
 
-        // --- 產生首頁慶祝彩帶 ---
         const homeView = document.getElementById('home-view');
         const colors = ['#d4a373', '#e9c46a', '#f4a261', '#e76f51', '#2a9d8f', '#a8dadc', '#ffb5a7'];
         for (let i = 0; i < 70; i++) {
@@ -279,20 +218,16 @@
 
         const totalPhotos = 40; 
         
-        // -----------------------------------------
-        // 共用資料載入與兩套系統初始化
-        // -----------------------------------------
         const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
         const lightboxThumbnails = document.getElementById('lightbox-thumbnails');
         const flipbookThumbnails = document.getElementById('flipbook-thumbnails');
         const bookWrapper = document.getElementById('book-wrapper');
-        const imagePromises = [];
 
+        // 初始化基礎結構 (依賴瀏覽器原生 lazy load，不卡網路)
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
-            // 1. 初始化網格相簿 (綁定 onload 觸發淡入)
             const galleryImg = document.createElement('img');
             galleryImg.loading = "lazy";
             galleryImg.onclick = () => openPhotoView(i);
@@ -300,7 +235,6 @@
             galleryImg.src = src;
             gallery.appendChild(galleryImg);
             
-            // 2. 初始化手機版燈箱的縮圖
             const thumbImg = document.createElement('img');
             thumbImg.loading = "lazy";
             thumbImg.id = `thumb-${i}`;
@@ -309,7 +243,6 @@
             thumbImg.src = src;
             lightboxThumbnails.appendChild(thumbImg);
 
-            // 3. 初始化電腦版 3D 相本抽屜的縮圖
             const fbThumbImg = document.createElement('img');
             fbThumbImg.loading = "lazy";
             fbThumbImg.id = `fb-thumb-${i}`;
@@ -320,18 +253,8 @@
             fbThumbImg.onload = function() { this.classList.add('loaded'); };
             fbThumbImg.src = src;
             flipbookThumbnails.appendChild(fbThumbImg);
-
-            // 讀取長寬以供給上方輪播圖使用
-            const promise = new Promise((resolve) => {
-                const imgObj = new Image();
-                imgObj.onload = function() { resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight }); };
-                imgObj.onerror = function() { resolve(null); };
-                imgObj.src = src;
-            });
-            imagePromises.push(promise);
         }
 
-        // 初始化 3D 相本結構 (用於電腦版彈出視窗)
         const numPapers = Math.ceil((totalPhotos + 2) / 2); 
         let currentPaperLocation = 1;
         const maxPaperLocation = numPapers + 1;
@@ -350,7 +273,6 @@
             const front = document.createElement('div'); front.classList.add('face', 'front');
             const back = document.createElement('div'); back.classList.add('face', 'back');
 
-            // 這裡的 img 標籤也直接寫入 onload="this.classList.add('loaded')"
             if (i === 1) {
                 front.innerHTML = `<div class="cover-content"><div class="subtitle">We Got Married</div><h1>世郡 & 禾昀</h1><p>與您分享我們的喜悅</p></div>`;
                 back.innerHTML = `<img src="images/photo1.jpg" loading="lazy" onload="this.classList.add('loaded')">`;
@@ -368,7 +290,23 @@
             bookWrapper.appendChild(paper);
         }
 
-        // 處理網格模式的上方隨機輪播圖
+        // --- 效能優化核心：固定抽取最一開始的 6 張照片進行預載與輪播 ---
+        const carouselSample = [];
+        const sampleCount = Math.min(6, totalPhotos);
+        for (let i = 1; i <= sampleCount; i++) {
+            carouselSample.push(i);
+        }
+
+        const imagePromises = carouselSample.map(i => {
+            const src = `images/photo${i}.jpg`;
+            return new Promise((resolve) => {
+                const imgObj = new Image();
+                imgObj.onload = function() { resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight }); };
+                imgObj.onerror = function() { resolve(null); };
+                imgObj.src = src;
+            });
+        });
+
         Promise.all(imagePromises).then((results) => {
             const landscapes = []; const portraits = [];
             results.forEach(res => { if (res) { if (res.isLandscape) landscapes.push(res.src); else portraits.push(res.src); } });
@@ -410,9 +348,6 @@
             }
         });
 
-        // -----------------------------------------
-        // 進入相簿與裝置判定分流
-        // -----------------------------------------
         function enterAlbum() {
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
@@ -420,39 +355,22 @@
         }
 
         function openPhotoView(index) {
-            if (window.innerWidth <= 768) {
-                openLightbox(index);
-            } else {
-                openFlipbookModal(index);
-            }
+            if (window.innerWidth <= 768) openLightbox(index);
+            else openFlipbookModal(index);
         }
 
-        // -----------------------------------------
-        // 手機版：傳統燈箱與切換邏輯
-        // -----------------------------------------
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         let currentGridPhotoIndex = 1; 
 
-        function openLightbox(index) {
-            lightbox.classList.add('active');
-            showInLightbox(index);
-        }
+        function openLightbox(index) { lightbox.classList.add('active'); showInLightbox(index); }
         function closeLightbox() { lightbox.classList.remove('active'); }
-        
-        document.getElementById('lightbox-main-area').addEventListener('click', function(e) {
-            if (e.target === this) closeLightbox();
-        });
+        document.getElementById('lightbox-main-area').addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
 
         function showInLightbox(index) {
             currentGridPhotoIndex = index; 
-            
-            // 換圖前先隱藏 (移除 loaded class)
             lightboxImg.classList.remove('loaded');
-            
-            lightboxImg.onload = function() {
-                this.classList.add('loaded');
-            };
+            lightboxImg.onload = function() { this.classList.add('loaded'); };
             lightboxImg.src = `images/photo${index}.jpg`;
             
             const thumbs = document.querySelectorAll('#lightbox .lightbox-thumbnails img');
@@ -464,26 +382,15 @@
             }
         }
 
-        // 點擊大圖切換
         lightboxImg.addEventListener('click', function(e) {
             e.stopPropagation(); 
             const rect = this.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            if (clickX > rect.width / 2) nextPhoto(); else prevPhoto();
+            if (e.clientX - rect.left > rect.width / 2) nextPhoto(); else prevPhoto();
         });
 
-        function nextPhoto() {
-            let nextIndex = currentGridPhotoIndex + 1;
-            if (nextIndex > totalPhotos) nextIndex = 1;
-            showInLightbox(nextIndex);
-        }
-        function prevPhoto() {
-            let prevIndex = currentGridPhotoIndex - 1;
-            if (prevIndex < 1) prevIndex = totalPhotos;
-            showInLightbox(prevIndex);
-        }
+        function nextPhoto() { let n = currentGridPhotoIndex + 1; showInLightbox(n > totalPhotos ? 1 : n); }
+        function prevPhoto() { let p = currentGridPhotoIndex - 1; showInLightbox(p < 1 ? totalPhotos : p); }
 
-        // 手機滑動切換
         let gridTouchstartX = 0; let gridTouchendX = 0;
         lightbox.addEventListener('touchstart', e => { gridTouchstartX = e.changedTouches[0].screenX; }, {passive: true});
         lightbox.addEventListener('touchend', e => {
@@ -492,51 +399,23 @@
             if (gridTouchendX > gridTouchstartX + 40) prevPhoto();
         }, {passive: true});
 
-        // -----------------------------------------
-        // 電腦版：3D 相本彈窗、動態計數與聯動邏輯
-        // -----------------------------------------
         const flipbookModal = document.getElementById('flipbook-modal');
-
-        function openFlipbookModal(photoIndex) {
-            flipbookModal.classList.add('active');
-            jumpToPaper(photoIndex);
-        }
-
-        function closeFlipbookModal() {
-            flipbookModal.classList.remove('active');
-        }
-
-        flipbookModal.addEventListener('click', function(e) {
-            if (e.target === this) closeFlipbookModal();
-        });
+        function openFlipbookModal(photoIndex) { flipbookModal.classList.add('active'); jumpToPaper(photoIndex); }
+        function closeFlipbookModal() { flipbookModal.classList.remove('active'); }
+        flipbookModal.addEventListener('click', function(e) { if (e.target === this) closeFlipbookModal(); });
 
         function jumpToPaper(photoIndex) {
-            let targetLocation;
-            if (photoIndex % 2 === 1) {
-                targetLocation = Math.ceil((photoIndex + 1) / 2) + 1;
-            } else {
-                targetLocation = Math.ceil((photoIndex + 1) / 2);
-            }
-
+            let targetLocation = photoIndex % 2 === 1 ? Math.ceil((photoIndex + 1) / 2) + 1 : Math.ceil((photoIndex + 1) / 2);
             const papers = document.querySelectorAll('.paper');
             papers.forEach(p => p.style.transition = 'none');
 
             for (let i = 1; i <= numPapers; i++) {
                 const paper = document.getElementById(`p${i}`);
-                if (i < targetLocation) {
-                    paper.classList.add('flipped');
-                    paper.style.zIndex = i;
-                } else {
-                    paper.classList.remove('flipped');
-                    paper.style.zIndex = numPapers - i + 1;
-                }
+                if (i < targetLocation) { paper.classList.add('flipped'); paper.style.zIndex = i; } 
+                else { paper.classList.remove('flipped'); paper.style.zIndex = numPapers - i + 1; }
             }
             currentPaperLocation = targetLocation;
-
-            setTimeout(() => {
-                papers.forEach(p => p.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)');
-            }, 50);
-
+            setTimeout(() => { papers.forEach(p => p.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)'); }, 50);
             updateFlipbookUI();
         }
 
@@ -545,8 +424,7 @@
                 const paper = document.getElementById(`p${currentPaperLocation}`);
                 paper.classList.add('flipped');
                 setTimeout(() => { paper.style.zIndex = currentPaperLocation; }, 400); 
-                currentPaperLocation++;
-                updateFlipbookUI();
+                currentPaperLocation++; updateFlipbookUI();
             }
         }
 
@@ -563,56 +441,29 @@
         function updateFlipbookUI() {
             const counter = document.getElementById('flipbook-counter');
             const thumbs = document.querySelectorAll('#flipbook-thumbnails img');
-            
             thumbs.forEach(t => t.classList.remove('active'));
 
             let leftPhoto = (currentPaperLocation - 2) * 2 + 1;
             let rightPhoto = (currentPaperLocation - 1) * 2;
             let text = "";
 
-            if (currentPaperLocation === 1) {
-                text = "封面";
-            } else if (currentPaperLocation === maxPaperLocation) {
-                text = "封底";
-            } else {
+            if (currentPaperLocation === 1) text = "封面";
+            else if (currentPaperLocation === maxPaperLocation) text = "封底";
+            else {
                 let shown = [];
-                if (leftPhoto >= 1 && leftPhoto <= totalPhotos) {
-                    shown.push(leftPhoto);
-                    const t = document.getElementById(`fb-thumb-${leftPhoto}`);
-                    if (t) t.classList.add('active');
-                }
-                if (rightPhoto >= 1 && rightPhoto <= totalPhotos) {
-                    shown.push(rightPhoto);
-                    const t = document.getElementById(`fb-thumb-${rightPhoto}`);
-                    if (t) t.classList.add('active');
-                }
-                
-                if (shown.length === 2) {
-                    text = `第 ${shown[0]} - ${shown[1]} 張 / 共 ${totalPhotos} 張`;
-                } else if (shown.length === 1) {
-                    text = `第 ${shown[0]} 張 / 共 ${totalPhotos} 張`;
-                }
+                if (leftPhoto >= 1 && leftPhoto <= totalPhotos) { shown.push(leftPhoto); const t = document.getElementById(`fb-thumb-${leftPhoto}`); if (t) t.classList.add('active'); }
+                if (rightPhoto >= 1 && rightPhoto <= totalPhotos) { shown.push(rightPhoto); const t = document.getElementById(`fb-thumb-${rightPhoto}`); if (t) t.classList.add('active'); }
+                if (shown.length === 2) text = `第 ${shown[0]} - ${shown[1]} 張 / 共 ${totalPhotos} 張`;
+                else if (shown.length === 1) text = `第 ${shown[0]} 張 / 共 ${totalPhotos} 張`;
             }
-            
             counter.innerText = text;
             
             const activeThumb = document.querySelector('#flipbook-thumbnails img.active');
-            if(activeThumb) {
-                activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
+            if(activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
 
-        // -----------------------------------------
-        // 回到頂部按鈕
-        // -----------------------------------------
         const backToTopBtn = document.getElementById("backToTopBtn");
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backToTopBtn.style.display = "block";
-            } else {
-                backToTopBtn.style.display = "none";
-            }
-        };
+        window.onscroll = function() { backToTopBtn.style.display = (document.documentElement.scrollTop > 300) ? "block" : "none"; };
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     </script>
 </body>
