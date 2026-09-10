@@ -17,12 +17,19 @@
             overflow-x: hidden;
         }
 
-        /* 全站圖片防下載、防拖曳、防選取 */
+        /* --- 新增：全站圖片載入平滑過場特效 --- */
         img {
             -webkit-user-drag: none; 
             user-select: none; 
             -webkit-user-select: none; 
             -webkit-touch-callout: none; 
+            opacity: 0; /* 預設完全透明，隱藏黑白未載入完成的狀態 */
+            transition: opacity 0.4s ease-in-out; 
+        }
+        
+        /* 當圖片 100% 載入完成後，透過 JS 加上 loaded class 淡入顯示 */
+        img.loaded {
+            opacity: 1;
         }
 
         /* 背景裝飾 */
@@ -81,14 +88,21 @@
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .gallery img { 
             width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; 
-            transition: transform 0.3s, box-shadow 0.3s; background: white; padding: 4px; box-sizing: border-box; pointer-events: auto;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.4s ease-in-out; background: white; padding: 4px; box-sizing: border-box; pointer-events: auto;
         }
-        .gallery img:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+        .gallery img.loaded:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
 
-        /* 共用縮圖樣式 */
+        /* --- 針對燈箱底部縮圖的透明度特殊設定 --- */
         .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
-        .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.3s, border 0.3s; border-radius: 6px; border: 2px solid transparent; pointer-events: auto; }
-        .lightbox-thumbnails img.active { opacity: 1; border-color: #fff; }
+        
+        .lightbox-thumbnails img { 
+            height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; 
+            border-radius: 6px; border: 2px solid transparent; pointer-events: auto; 
+            transition: opacity 0.4s ease-in-out, border 0.3s; 
+        }
+        .lightbox-thumbnails img.loaded { opacity: 0.4; } /* 未選中的縮圖半透明 */
+        .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #fff; } /* 選中的縮圖全亮 */
+        
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
         .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
         .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #666; border-radius: 4px; }
@@ -143,7 +157,6 @@
         .cover-content h1 { font-weight: 400; font-size: 32px; letter-spacing: 2px; color: #5c4a4d; margin: 0 0 15px 0; }
         .cover-content p { color: #777; font-size: 14px; letter-spacing: 2px; }
 
-        /* --- 3D相本專屬：底部滑鼠感應抽屜 (淡入淡出特效) --- */
         .flipbook-bottom-trigger {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1000;
         }
@@ -232,7 +245,7 @@
         <!-- 感應區：用於觸發淡出淡入特效 -->
         <div class="flipbook-bottom-trigger"></div>
 
-        <!-- 底部滑鼠感應抽屜 (完全隱藏，懸浮淡入) -->
+        <!-- 底部滑鼠感應抽屜 -->
         <div class="flipbook-bottom-area">
             <div class="book-controls">
                 <span class="instruction">👈 點擊相本左側翻回上一頁 ｜ 點擊右側翻到下一頁 👉</span>
@@ -264,7 +277,6 @@
             homeView.appendChild(confetti);
         }
 
-        // 修改這裡：設定為 40 張照片
         const totalPhotos = 40; 
         
         // -----------------------------------------
@@ -280,30 +292,33 @@
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
-            // 1. 初始化網格相簿
+            // 1. 初始化網格相簿 (綁定 onload 觸發淡入)
             const galleryImg = document.createElement('img');
-            galleryImg.src = src;
             galleryImg.loading = "lazy";
             galleryImg.onclick = () => openPhotoView(i);
+            galleryImg.onload = function() { this.classList.add('loaded'); };
+            galleryImg.src = src;
             gallery.appendChild(galleryImg);
             
             // 2. 初始化手機版燈箱的縮圖
             const thumbImg = document.createElement('img');
-            thumbImg.src = src;
             thumbImg.loading = "lazy";
             thumbImg.id = `thumb-${i}`;
             thumbImg.onclick = () => showInLightbox(i);
+            thumbImg.onload = function() { this.classList.add('loaded'); };
+            thumbImg.src = src;
             lightboxThumbnails.appendChild(thumbImg);
 
             // 3. 初始化電腦版 3D 相本抽屜的縮圖
             const fbThumbImg = document.createElement('img');
-            fbThumbImg.src = src;
             fbThumbImg.loading = "lazy";
             fbThumbImg.id = `fb-thumb-${i}`;
             fbThumbImg.onclick = (e) => {
-                e.stopPropagation(); // 避免點擊縮圖時關閉彈窗
+                e.stopPropagation(); 
                 jumpToPaper(i);
             };
+            fbThumbImg.onload = function() { this.classList.add('loaded'); };
+            fbThumbImg.src = src;
             flipbookThumbnails.appendChild(fbThumbImg);
 
             // 讀取長寬以供給上方輪播圖使用
@@ -335,17 +350,18 @@
             const front = document.createElement('div'); front.classList.add('face', 'front');
             const back = document.createElement('div'); back.classList.add('face', 'back');
 
+            // 這裡的 img 標籤也直接寫入 onload="this.classList.add('loaded')"
             if (i === 1) {
                 front.innerHTML = `<div class="cover-content"><div class="subtitle">We Got Married</div><h1>世郡 & 禾昀</h1><p>與您分享我們的喜悅</p></div>`;
-                back.innerHTML = `<img src="images/photo1.jpg" loading="lazy">`;
+                back.innerHTML = `<img src="images/photo1.jpg" loading="lazy" onload="this.classList.add('loaded')">`;
             } else if (i === numPapers) {
-                front.innerHTML = `<img src="images/photo${totalPhotos}.jpg" loading="lazy">`;
+                front.innerHTML = `<img src="images/photo${totalPhotos}.jpg" loading="lazy" onload="this.classList.add('loaded')">`;
                 back.innerHTML = `<div class="cover-content"><h1>Thank You</h1><p>感謝您的參與與祝福</p></div>`;
             } else {
                 let frontPhotoNum = (i - 1) * 2;
                 let backPhotoNum = frontPhotoNum + 1;
-                front.innerHTML = `<img src="images/photo${frontPhotoNum}.jpg" loading="lazy">`;
-                if(backPhotoNum <= totalPhotos) back.innerHTML = `<img src="images/photo${backPhotoNum}.jpg" loading="lazy">`;
+                front.innerHTML = `<img src="images/photo${frontPhotoNum}.jpg" loading="lazy" onload="this.classList.add('loaded')">`;
+                if(backPhotoNum <= totalPhotos) back.innerHTML = `<img src="images/photo${backPhotoNum}.jpg" loading="lazy" onload="this.classList.add('loaded')">`;
             }
             paper.appendChild(front);
             paper.appendChild(back);
@@ -360,14 +376,23 @@
 
             landscapes.forEach(src => {
                 const slide = document.createElement('div'); slide.className = 'carousel-slide';
-                const img = document.createElement('img'); img.src = src;
+                const img = document.createElement('img'); 
+                img.onload = function() { this.classList.add('loaded'); };
+                img.src = src;
                 slide.appendChild(img); galleryCarousel.appendChild(slide); slidesElements.push(slide);
             });
             for (let i = 0; i < portraits.length; i += 2) {
                 const slide = document.createElement('div'); slide.className = 'carousel-slide dual-portrait';
-                const img1 = document.createElement('img'); img1.src = portraits[i]; slide.appendChild(img1);
+                const img1 = document.createElement('img'); 
+                img1.onload = function() { this.classList.add('loaded'); };
+                img1.src = portraits[i]; 
+                slide.appendChild(img1);
+                
                 if (i + 1 < portraits.length) {
-                    const img2 = document.createElement('img'); img2.src = portraits[i + 1]; slide.appendChild(img2);
+                    const img2 = document.createElement('img'); 
+                    img2.onload = function() { this.classList.add('loaded'); };
+                    img2.src = portraits[i + 1]; 
+                    slide.appendChild(img2);
                 }
                 galleryCarousel.appendChild(slide); slidesElements.push(slide);
             }
@@ -395,7 +420,6 @@
         }
 
         function openPhotoView(index) {
-            // 螢幕小於等於 768px 開啟手機版專屬燈箱，否則開 3D 相本
             if (window.innerWidth <= 768) {
                 openLightbox(index);
             } else {
@@ -422,7 +446,15 @@
 
         function showInLightbox(index) {
             currentGridPhotoIndex = index; 
+            
+            // 換圖前先隱藏 (移除 loaded class)
+            lightboxImg.classList.remove('loaded');
+            
+            lightboxImg.onload = function() {
+                this.classList.add('loaded');
+            };
             lightboxImg.src = `images/photo${index}.jpg`;
+            
             const thumbs = document.querySelectorAll('#lightbox .lightbox-thumbnails img');
             thumbs.forEach(t => t.classList.remove('active'));
             const activeThumb = document.getElementById(`thumb-${index}`);
@@ -486,7 +518,6 @@
                 targetLocation = Math.ceil((photoIndex + 1) / 2);
             }
 
-            // 暫停動畫以實現瞬間跳轉
             const papers = document.querySelectorAll('.paper');
             papers.forEach(p => p.style.transition = 'none');
 
@@ -502,7 +533,6 @@
             }
             currentPaperLocation = targetLocation;
 
-            // 恢復動畫
             setTimeout(() => {
                 papers.forEach(p => p.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)');
             }, 50);
@@ -530,15 +560,12 @@
             }
         }
 
-        // --- 核心：更新 3D 相本的計數器與縮圖狀態 ---
         function updateFlipbookUI() {
             const counter = document.getElementById('flipbook-counter');
             const thumbs = document.querySelectorAll('#flipbook-thumbnails img');
             
-            // 清除縮圖的 highlight
             thumbs.forEach(t => t.classList.remove('active'));
 
-            // 計算目前畫面上是哪兩張照片
             let leftPhoto = (currentPaperLocation - 2) * 2 + 1;
             let rightPhoto = (currentPaperLocation - 1) * 2;
             let text = "";
@@ -549,20 +576,17 @@
                 text = "封底";
             } else {
                 let shown = [];
-                // 檢查左側照片並點亮縮圖
                 if (leftPhoto >= 1 && leftPhoto <= totalPhotos) {
                     shown.push(leftPhoto);
                     const t = document.getElementById(`fb-thumb-${leftPhoto}`);
                     if (t) t.classList.add('active');
                 }
-                // 檢查右側照片並點亮縮圖
                 if (rightPhoto >= 1 && rightPhoto <= totalPhotos) {
                     shown.push(rightPhoto);
                     const t = document.getElementById(`fb-thumb-${rightPhoto}`);
                     if (t) t.classList.add('active');
                 }
                 
-                // 組合顯示文字
                 if (shown.length === 2) {
                     text = `第 ${shown[0]} - ${shown[1]} 張 / 共 ${totalPhotos} 張`;
                 } else if (shown.length === 1) {
@@ -572,7 +596,6 @@
             
             counter.innerText = text;
             
-            // 自動將縮圖列捲動到目前亮起的位置
             const activeThumb = document.querySelector('#flipbook-thumbnails img.active');
             if(activeThumb) {
                 activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
