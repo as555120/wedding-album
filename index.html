@@ -91,31 +91,38 @@
         /* 縮圖樣式 */
         .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
         .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; border-radius: 6px; border: 2px solid transparent; pointer-events: auto; transition: opacity 0.4s ease-in-out, border 0.3s; }
-        .lightbox-thumbnails img.loaded { opacity: 0.4; } 
-        .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #fff; } 
+        .lightbox-thumbnails img.loaded { opacity: 0.5; } 
+        /* 修改：選中時的邊框顏色改為深褐色，以配合淺色背景 */
+        .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #5c4a4d; } 
         
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
-        .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #666; border-radius: 4px; }
+        .lightbox-thumbnails::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        .lightbox-thumbnails::-webkit-scrollbar-thumb { background: #aaa; border-radius: 4px; }
 
         /* =========================================
            彈出視窗 1：手機版專用傳統燈箱
            ========================================= */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; touch-action: pan-y; }
+        /* 修改：背景從黑色改為相簿底色 #fafafa */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fafafa; z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; touch-action: pan-y; }
         #lightbox.active { display: flex; }
-        .close-btn { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; cursor: pointer; z-index: 1001; }
+        /* 修改：關閉按鈕顏色改為深色 */
+        .close-btn { position: absolute; top: 15px; right: 25px; color: #5c4a4d; font-size: 40px; cursor: pointer; z-index: 1001; }
         
         .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; position: relative; }
         
-        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 0 20px rgba(0,0,0,0.5); cursor: pointer; pointer-events: auto; }
-        #lightbox .lightbox-thumbnails { background: rgba(20,20,20,0.8); }
+        /* 修改：因為背景變白了，加深一點照片陰影讓它更有立體感 */
+        #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); cursor: pointer; pointer-events: auto; }
+        
+        /* 修改：手機版底部縮圖區塊背景改為淡淡的灰色 */
+        #lightbox .lightbox-thumbnails { background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); }
 
         /* =========================================
            彈出視窗 2：電腦版專用 3D 相本
            ========================================= */
+        /* 修改：背景從黑色改為相簿底色 #fafafa */
         #flipbook-modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 1000; flex-direction: column; 
+            background: #fafafa; z-index: 1000; flex-direction: column; 
             align-items: center; justify-content: center; overflow: hidden;
         }
         #flipbook-modal.active { display: flex; animation: fadeIn 0.4s ease forwards;}
@@ -134,14 +141,22 @@
         .cover-content p { color: #777; font-size: 14px; letter-spacing: 2px; }
 
         .flipbook-bottom-trigger { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1000; }
+        
+        /* 修改：3D相本的底部抽屜改為明亮風格，並帶有一點陰影與毛玻璃效果 */
         .flipbook-bottom-area {
-            position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.85); opacity: 0; visibility: hidden;
+            position: absolute; bottom: 0; left: 0; width: 100%; 
+            background: rgba(250, 250, 250, 0.95); 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            opacity: 0; visibility: hidden;
             transition: opacity 0.4s ease, visibility 0.4s ease; z-index: 1001; display: flex; flex-direction: column; align-items: center; padding-bottom: 15px; 
         }
         .flipbook-bottom-trigger:hover + .flipbook-bottom-area, .flipbook-bottom-area:hover { opacity: 1; visibility: visible; }
-        .book-controls { display: flex; gap: 20px; align-items: center; color: white; padding: 12px 0; margin-bottom: 5px; }
-        .instruction { color: #ccc; font-size: 14px; letter-spacing: 1px; }
-        #flipbook-counter { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
+        
+        /* 修改：抽屜內的文字改為深色 */
+        .book-controls { display: flex; gap: 20px; align-items: center; color: #5c4a4d; padding: 12px 0; margin-bottom: 5px; }
+        .instruction { color: #777; font-size: 14px; letter-spacing: 1px; }
+        #flipbook-counter { background: rgba(92, 74, 77, 0.1); color: #5c4a4d; padding: 5px 15px; border-radius: 20px; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
+        
         #backToTopBtn { display: none; position: fixed; bottom: 30px; right: 30px; z-index: 900; font-size: 24px; border: none; background-color: #5c4a4d; color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; outline: none; }
         #backToTopBtn:hover { background: #4a3b3d; transform: translateY(-3px); }
 
@@ -293,10 +308,9 @@
         // ==========================================
         // 核心：兩階段動態輪播載入 (先 1~6，再 7~39)
         // ==========================================
-        const slidesElements = []; // 共用的輪播元素陣列
-        let currentCarouselIndex = 0; // 記錄目前的投影片索引
+        const slidesElements = []; 
+        let currentCarouselIndex = 0; 
 
-        // 幫手函數：讀取一批照片並回傳有效的圖片資訊
         function loadBatch(sampleArray) {
             const promises = sampleArray.map(i => {
                 const src = `images/photo${i}.jpg`;
@@ -310,7 +324,6 @@
             return Promise.all(promises).then(results => results.filter(res => res !== null));
         }
 
-        // 幫手函數：將讀取好的圖片轉成輪播 DOM 並推入 slidesElements 陣列
         function appendToCarousel(validResults) {
             const landscapes = []; const portraits = [];
             validResults.forEach(res => { if (res.isLandscape) landscapes.push(res.src); else portraits.push(res.src); });
@@ -339,17 +352,15 @@
             }
         }
 
-        // 階段一：只載入 1 到 6 張 (求秒開速度)
+        // 階段一：只載入 1 到 6 張
         const batch1 = [1, 2, 3, 4, 5, 6];
         loadBatch(batch1).then(validResults1 => {
             appendToCarousel(validResults1);
-            console.log(`[輪播階段一] 已載入前 6 張，開始啟動輪播...`);
 
             if (slidesElements.length > 0) {
                 currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
                 slidesElements[currentCarouselIndex].classList.add('active');
                 
-                // 啟動定時器，因為 slidesElements 陣列是共用的，後續加入的照片會自動被輪播抓到
                 setInterval(() => {
                     if (slidesElements.length > 1) {
                         slidesElements.forEach(slide => slide.classList.remove('active'));
@@ -359,14 +370,13 @@
                 }, 4000);
             }
 
-            // 階段二：輪播啟動後，再開始背景載入 7 到 39 張
+            // 階段二：背景載入 7 到 39 張
             const batch2 = [];
             for (let i = 7; i < totalPhotos; i++) batch2.push(i);
             
             if(batch2.length > 0) {
                 loadBatch(batch2).then(validResults2 => {
                     appendToCarousel(validResults2);
-                    console.log(`[輪播階段二] 已成功將第 7 到 39 張照片載入並擴充進輪播清單！(目前總計 ${slidesElements.length} 個輪播畫面)`);
                 });
             }
         });
