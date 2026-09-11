@@ -290,26 +290,30 @@
             bookWrapper.appendChild(paper);
         }
 
-        // --- 輪播圖設定：包含除了最後一張 (photo40) 以外的所有照片 ---
-        const carouselSample = [];
-        for (let i = 1; i < totalPhotos; i++) { 
-            carouselSample.push(i);
+        // ==========================================
+        // 核心：兩階段動態輪播載入 (先 1~6，再 7~39)
+        // ==========================================
+        const slidesElements = []; // 共用的輪播元素陣列
+        let currentCarouselIndex = 0; // 記錄目前的投影片索引
+
+        // 幫手函數：讀取一批照片並回傳有效的圖片資訊
+        function loadBatch(sampleArray) {
+            const promises = sampleArray.map(i => {
+                const src = `images/photo${i}.jpg`;
+                return new Promise((resolve) => {
+                    const imgObj = new Image();
+                    imgObj.onload = function() { resolve({ id: i, src: src, isLandscape: this.naturalWidth > this.naturalHeight }); };
+                    imgObj.onerror = function() { resolve(null); };
+                    imgObj.src = src;
+                });
+            });
+            return Promise.all(promises).then(results => results.filter(res => res !== null));
         }
 
-        const imagePromises = carouselSample.map(i => {
-            const src = `images/photo${i}.jpg`;
-            return new Promise((resolve) => {
-                const imgObj = new Image();
-                imgObj.onload = function() { resolve({ src: src, isLandscape: this.naturalWidth > this.naturalHeight }); };
-                imgObj.onerror = function() { resolve(null); };
-                imgObj.src = src;
-            });
-        });
-
-        Promise.all(imagePromises).then((results) => {
+        // 幫手函數：將讀取好的圖片轉成輪播 DOM 並推入 slidesElements 陣列
+        function appendToCarousel(validResults) {
             const landscapes = []; const portraits = [];
-            results.forEach(res => { if (res) { if (res.isLandscape) landscapes.push(res.src); else portraits.push(res.src); } });
-            const slidesElements = [];
+            validResults.forEach(res => { if (res.isLandscape) landscapes.push(res.src); else portraits.push(res.src); });
 
             landscapes.forEach(src => {
                 const slide = document.createElement('div'); slide.className = 'carousel-slide';
@@ -333,10 +337,19 @@
                 }
                 galleryCarousel.appendChild(slide); slidesElements.push(slide);
             }
+        }
+
+        // 階段一：只載入 1 到 6 張 (求秒開速度)
+        const batch1 = [1, 2, 3, 4, 5, 6];
+        loadBatch(batch1).then(validResults1 => {
+            appendToCarousel(validResults1);
+            console.log(`[輪播階段一] 已載入前 6 張，開始啟動輪播...`);
 
             if (slidesElements.length > 0) {
-                let currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
+                currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
                 slidesElements[currentCarouselIndex].classList.add('active');
+                
+                // 啟動定時器，因為 slidesElements 陣列是共用的，後續加入的照片會自動被輪播抓到
                 setInterval(() => {
                     if (slidesElements.length > 1) {
                         slidesElements.forEach(slide => slide.classList.remove('active'));
@@ -345,8 +358,22 @@
                     }
                 }, 4000);
             }
+
+            // 階段二：輪播啟動後，再開始背景載入 7 到 39 張
+            const batch2 = [];
+            for (let i = 7; i < totalPhotos; i++) batch2.push(i);
+            
+            if(batch2.length > 0) {
+                loadBatch(batch2).then(validResults2 => {
+                    appendToCarousel(validResults2);
+                    console.log(`[輪播階段二] 已成功將第 7 到 39 張照片載入並擴充進輪播清單！(目前總計 ${slidesElements.length} 個輪播畫面)`);
+                });
+            }
         });
 
+        // -----------------------------------------
+        // 進入相簿與裝置判定分流
+        // -----------------------------------------
         function enterAlbum() {
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
