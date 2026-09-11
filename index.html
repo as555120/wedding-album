@@ -224,7 +224,7 @@
         const flipbookThumbnails = document.getElementById('flipbook-thumbnails');
         const bookWrapper = document.getElementById('book-wrapper');
 
-        // 初始化基礎結構 (依賴瀏覽器原生 lazy load，不卡網路)
+        // 初始化基礎結構
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
@@ -290,10 +290,9 @@
             bookWrapper.appendChild(paper);
         }
 
-        // --- 效能優化核心：固定抽取最一開始的 6 張照片進行預載與輪播 ---
+        // --- 輪播圖設定：包含除了最後一張 (photo40) 以外的所有照片 ---
         const carouselSample = [];
-        const sampleCount = Math.min(6, totalPhotos);
-        for (let i = 1; i <= sampleCount; i++) {
+        for (let i = 1; i < totalPhotos; i++) { 
             carouselSample.push(i);
         }
 
