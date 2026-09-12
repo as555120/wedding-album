@@ -79,11 +79,8 @@
         .carousel-slide img { height: 100%; width: 100%; object-fit: contain; pointer-events: auto; }
         .carousel-slide.dual-portrait img { width: calc(50% - 5px); }
 
-        /* --- 網頁總瀏覽次數排版 --- */
         .gallery-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
         .gallery-header h2 { font-weight: 300; color: #5c4a4d; margin: 0 0 10px 0; letter-spacing: 2px; }
-        .site-views-badge { font-size: 13px; color: #777; letter-spacing: 1px; background: rgba(0,0,0,0.04); padding: 6px 16px; border-radius: 20px; }
-        .site-views-badge span { font-weight: bold; color: #5c4a4d; }
 
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .gallery img { 
@@ -113,13 +110,6 @@
         
         #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); cursor: pointer; pointer-events: auto; }
         
-        /* --- 燈箱照片瀏覽次數徽章 --- */
-        .photo-view-badge {
-            position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.85); color: #5c4a4d;
-            padding: 5px 12px; border-radius: 20px; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            z-index: 1002; display: flex; align-items: center; gap: 5px; font-weight: bold; letter-spacing: 1px;
-        }
-
         #lightbox .lightbox-thumbnails { background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); }
 
         /* =========================================
@@ -188,8 +178,6 @@
         <div id="gallery-carousel"></div>
         <div class="gallery-header">
             <h2>所有照片</h2>
-            <!-- 網頁總瀏覽次數顯示區 -->
-            <div class="site-views-badge">👁️ 網頁已被打開了 <span id="total-views-count">--</span> 次</div>
         </div>
         <div class="gallery" id="gallery"></div>
     </div>
@@ -197,8 +185,6 @@
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main" id="lightbox-main-area">
-            <!-- 手機版燈箱瀏覽次數 -->
-            <div class="photo-view-badge">👁️ <span id="lightbox-view-count">--</span></div>
             <img id="lightbox-img" src="" alt="Enlarged photo">
         </div>
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
@@ -212,8 +198,6 @@
             <div class="book-controls">
                 <span class="instruction">👈 左側翻回上一頁 ｜ 右側翻到下一頁 👉</span>
                 <span id="flipbook-counter">封面</span>
-                <!-- 電腦版相本跨頁瀏覽次數 -->
-                <span class="instruction" id="flipbook-view-badge" style="display:none; margin-left:10px;">👁️ 瀏覽: <span id="flipbook-view-count" style="font-weight:bold; color:#5c4a4d;">--</span> 次</span>
             </div>
             <div class="lightbox-thumbnails" id="flipbook-thumbnails"></div>
         </div>
@@ -240,8 +224,6 @@
         }
 
         const totalPhotos = 40; 
-        // --- 設定 CounterAPI 的專屬命名空間 ---
-        const API_NAMESPACE = "shijun_heyun_album_2026_v2";
         
         const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
@@ -389,7 +371,7 @@
         });
 
         // ==========================================
-        // 進入相簿與計數器邏輯
+        // 進入相簿與裝置判定分流
         // ==========================================
         function enterAlbum() {
             document.getElementById('home-view').style.display = 'none';
@@ -397,27 +379,13 @@
             window.scrollTo(0, 0); 
         }
 
-        // --- 網頁總開啟次數 ---
-        function recordPageView() {
-            const countEl = document.getElementById('total-views-count');
-            if(!sessionStorage.getItem('page_viewed_session')) {
-                sessionStorage.setItem('page_viewed_session', 'true');
-                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/page_views/up`)
-                    .then(r => r.json()).then(d => { if(d.count) countEl.innerText = d.count; }).catch(e=>{});
-            } else {
-                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/page_views`)
-                    .then(r => r.json()).then(d => { if(d.count) countEl.innerText = d.count; }).catch(e=>{});
-            }
-        }
-        recordPageView(); // 網頁載入時立刻觸發
-
         function openPhotoView(index) {
             if (window.innerWidth <= 768) openLightbox(index);
             else openFlipbookModal(index);
         }
 
         // ==========================================
-        // 手機版：傳統燈箱與單圖計數邏輯
+        // 手機版：傳統燈箱邏輯
         // ==========================================
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
@@ -439,22 +407,6 @@
             if(activeThumb) {
                 activeThumb.classList.add('active');
                 activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-            }
-
-            // 觸發單張照片瀏覽計數
-            recordPhotoView(index);
-        }
-
-        function recordPhotoView(index) {
-            const viewCountEl = document.getElementById('lightbox-view-count');
-            viewCountEl.innerText = '--';
-            if(!sessionStorage.getItem(`photo_${index}_viewed`)) {
-                sessionStorage.setItem(`photo_${index}_viewed`, 'true');
-                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${index}/up`)
-                    .then(r => r.json()).then(d => { if(d.count) viewCountEl.innerText = d.count; }).catch(e=>{});
-            } else {
-                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${index}`)
-                    .then(r => r.json()).then(d => { if(d.count) viewCountEl.innerText = d.count; }).catch(e=>{});
             }
         }
 
@@ -482,7 +434,7 @@
         }, {passive: true});
 
         // ==========================================
-        // 電腦版：3D 相本彈窗與跨頁計數邏輯
+        // 電腦版：3D 相本彈窗邏輯
         // ==========================================
         const flipbookModal = document.getElementById('flipbook-modal');
         function openFlipbookModal(photoIndex) { flipbookModal.classList.add('active'); jumpToPaper(photoIndex); }
@@ -526,8 +478,6 @@
         function updateFlipbookUI() {
             const counter = document.getElementById('flipbook-counter');
             const thumbs = document.querySelectorAll('#flipbook-thumbnails img');
-            const fbBadge = document.getElementById('flipbook-view-badge');
-            const fbCountEl = document.getElementById('flipbook-view-count');
 
             thumbs.forEach(t => t.classList.remove('active'));
 
@@ -537,49 +487,23 @@
 
             if (currentPaperLocation === 1) {
                 text = "封面";
-                fbBadge.style.display = 'none'; // 封面不顯示瀏覽數
             } 
             else if (currentPaperLocation === maxPaperLocation) {
                 text = "封底";
-                fbBadge.style.display = 'none'; // 封底不顯示瀏覽數
             } 
             else {
-                fbBadge.style.display = 'inline';
-                fbCountEl.innerText = '--';
-                
                 let shown = [];
-                let promises = [];
-                let totalViews = 0;
 
                 [leftPhoto, rightPhoto].forEach(idx => {
                     if (idx >= 1 && idx <= totalPhotos) { 
                         shown.push(idx); 
                         const t = document.getElementById(`fb-thumb-${idx}`); 
                         if (t) t.classList.add('active'); 
-
-                        // 同時觸發這兩張照片的計數並加總
-                        if(!sessionStorage.getItem(`photo_${idx}_viewed`)) {
-                            sessionStorage.setItem(`photo_${idx}_viewed`, 'true');
-                            promises.push(
-                                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${idx}/up`)
-                                    .then(r => r.json()).then(d => { if(d.count) totalViews += d.count; }).catch(e=>{})
-                            );
-                        } else {
-                            promises.push(
-                                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${idx}`)
-                                    .then(r => r.json()).then(d => { if(d.count) totalViews += d.count; }).catch(e=>{})
-                            );
-                        }
                     }
                 });
                 
                 if (shown.length === 2) text = `第 ${shown[0]} - ${shown[1]} 張 / 共 ${totalPhotos} 張`;
                 else if (shown.length === 1) text = `第 ${shown[0]} 張 / 共 ${totalPhotos} 張`;
-
-                // 等這兩張照片的瀏覽數都獲取完畢後，顯示加總結果
-                Promise.all(promises).then(() => {
-                    if(totalViews > 0) fbCountEl.innerText = totalViews;
-                });
             }
             
             counter.innerText = text;
