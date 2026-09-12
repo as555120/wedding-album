@@ -467,9 +467,15 @@
         function nextPhoto() { let n = currentGridPhotoIndex + 1; showInLightbox(n > totalPhotos ? 1 : n); }
         function prevPhoto() { let p = currentGridPhotoIndex - 1; showInLightbox(p < 1 ? totalPhotos : p); }
 
+        // --- 手機滑動切換：嚴格綁定在主圖區，避免滑動縮圖誤觸 ---
+        const lightboxMainArea = document.getElementById('lightbox-main-area');
         let gridTouchstartX = 0; let gridTouchendX = 0;
-        lightbox.addEventListener('touchstart', e => { gridTouchstartX = e.changedTouches[0].screenX; }, {passive: true});
-        lightbox.addEventListener('touchend', e => {
+        
+        lightboxMainArea.addEventListener('touchstart', e => { 
+            gridTouchstartX = e.changedTouches[0].screenX; 
+        }, {passive: true});
+        
+        lightboxMainArea.addEventListener('touchend', e => {
             gridTouchendX = e.changedTouches[0].screenX;
             if (gridTouchendX < gridTouchstartX - 40) nextPhoto();
             if (gridTouchendX > gridTouchstartX + 40) prevPhoto();
