@@ -79,8 +79,12 @@
         .carousel-slide img { height: 100%; width: 100%; object-fit: contain; pointer-events: auto; }
         .carousel-slide.dual-portrait img { width: calc(50% - 5px); }
 
-        #main-content h2 { font-weight: 300; color: #5c4a4d; margin-bottom: 30px; letter-spacing: 2px; }
-        
+        /* --- 網頁總瀏覽次數排版 --- */
+        .gallery-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+        .gallery-header h2 { font-weight: 300; color: #5c4a4d; margin: 0 0 10px 0; letter-spacing: 2px; }
+        .site-views-badge { font-size: 13px; color: #777; letter-spacing: 1px; background: rgba(0,0,0,0.04); padding: 6px 16px; border-radius: 20px; }
+        .site-views-badge span { font-weight: bold; color: #5c4a4d; }
+
         .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .gallery img { 
             width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; cursor: pointer; 
@@ -92,7 +96,6 @@
         .lightbox-thumbnails { display: flex; overflow-x: auto; width: 100%; padding: 15px 10px; gap: 10px; box-sizing: border-box; align-items: center; height: 120px; }
         .lightbox-thumbnails img { height: 80px; min-width: 80px; object-fit: cover; cursor: pointer; border-radius: 6px; border: 2px solid transparent; pointer-events: auto; transition: opacity 0.4s ease-in-out, border 0.3s; }
         .lightbox-thumbnails img.loaded { opacity: 0.5; } 
-        /* 修改：選中時的邊框顏色改為深褐色，以配合淺色背景 */
         .lightbox-thumbnails img.loaded.active { opacity: 1; border-color: #5c4a4d; } 
         
         .lightbox-thumbnails::-webkit-scrollbar { height: 8px; }
@@ -102,24 +105,26 @@
         /* =========================================
            彈出視窗 1：手機版專用傳統燈箱
            ========================================= */
-        /* 修改：背景從黑色改為相簿底色 #fafafa */
         #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fafafa; z-index: 1000; flex-direction: column; justify-content: space-between; align-items: center; touch-action: pan-y; }
         #lightbox.active { display: flex; }
-        /* 修改：關閉按鈕顏色改為深色 */
         .close-btn { position: absolute; top: 15px; right: 25px; color: #5c4a4d; font-size: 40px; cursor: pointer; z-index: 1001; }
         
         .lightbox-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 20px; box-sizing: border-box; position: relative; }
         
-        /* 修改：因為背景變白了，加深一點照片陰影讓它更有立體感 */
         #lightbox-img { max-width: 100%; max-height: 75vh; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); cursor: pointer; pointer-events: auto; }
         
-        /* 修改：手機版底部縮圖區塊背景改為淡淡的灰色 */
+        /* --- 燈箱照片瀏覽次數徽章 --- */
+        .photo-view-badge {
+            position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.85); color: #5c4a4d;
+            padding: 5px 12px; border-radius: 20px; font-size: 13px; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            z-index: 1002; display: flex; align-items: center; gap: 5px; font-weight: bold; letter-spacing: 1px;
+        }
+
         #lightbox .lightbox-thumbnails { background: rgba(0,0,0,0.03); border-top: 1px solid rgba(0,0,0,0.05); }
 
         /* =========================================
            彈出視窗 2：電腦版專用 3D 相本
            ========================================= */
-        /* 修改：背景從黑色改為相簿底色 #fafafa */
         #flipbook-modal { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: #fafafa; z-index: 1000; flex-direction: column; 
@@ -142,17 +147,12 @@
 
         .flipbook-bottom-trigger { position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; z-index: 1000; }
         
-        /* 修改：3D相本的底部抽屜改為明亮風格，並帶有一點陰影與毛玻璃效果 */
         .flipbook-bottom-area {
-            position: absolute; bottom: 0; left: 0; width: 100%; 
-            background: rgba(250, 250, 250, 0.95); 
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-            opacity: 0; visibility: hidden;
+            position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(250, 250, 250, 0.95); box-shadow: 0 -5px 20px rgba(0,0,0,0.05); opacity: 0; visibility: hidden;
             transition: opacity 0.4s ease, visibility 0.4s ease; z-index: 1001; display: flex; flex-direction: column; align-items: center; padding-bottom: 15px; 
         }
         .flipbook-bottom-trigger:hover + .flipbook-bottom-area, .flipbook-bottom-area:hover { opacity: 1; visibility: visible; }
         
-        /* 修改：抽屜內的文字改為深色 */
         .book-controls { display: flex; gap: 20px; align-items: center; color: #5c4a4d; padding: 12px 0; margin-bottom: 5px; }
         .instruction { color: #777; font-size: 14px; letter-spacing: 1px; }
         #flipbook-counter { background: rgba(92, 74, 77, 0.1); color: #5c4a4d; padding: 5px 15px; border-radius: 20px; font-size: 14px; letter-spacing: 1px; font-weight: bold; }
@@ -186,13 +186,19 @@
 
     <div id="main-content">
         <div id="gallery-carousel"></div>
-        <h2>所有照片</h2>
+        <div class="gallery-header">
+            <h2>所有照片</h2>
+            <!-- 網頁總瀏覽次數顯示區 -->
+            <div class="site-views-badge">👁️ 網頁已被打開了 <span id="total-views-count">--</span> 次</div>
+        </div>
         <div class="gallery" id="gallery"></div>
     </div>
 
     <div id="lightbox">
         <span class="close-btn" onclick="closeLightbox()">&times;</span>
         <div class="lightbox-main" id="lightbox-main-area">
+            <!-- 手機版燈箱瀏覽次數 -->
+            <div class="photo-view-badge">👁️ <span id="lightbox-view-count">--</span></div>
             <img id="lightbox-img" src="" alt="Enlarged photo">
         </div>
         <div class="lightbox-thumbnails" id="lightbox-thumbnails"></div>
@@ -204,8 +210,10 @@
         <div class="flipbook-bottom-trigger"></div>
         <div class="flipbook-bottom-area">
             <div class="book-controls">
-                <span class="instruction">👈 點擊相本左側翻回上一頁 ｜ 點擊右側翻到下一頁 👉</span>
+                <span class="instruction">👈 左側翻回上一頁 ｜ 右側翻到下一頁 👉</span>
                 <span id="flipbook-counter">封面</span>
+                <!-- 電腦版相本跨頁瀏覽次數 -->
+                <span class="instruction" id="flipbook-view-badge" style="display:none; margin-left:10px;">👁️ 瀏覽: <span id="flipbook-view-count" style="font-weight:bold; color:#5c4a4d;">--</span> 次</span>
             </div>
             <div class="lightbox-thumbnails" id="flipbook-thumbnails"></div>
         </div>
@@ -232,6 +240,8 @@
         }
 
         const totalPhotos = 40; 
+        // --- 設定 CounterAPI 的專屬命名空間 ---
+        const API_NAMESPACE = "shijun_heyun_album_2026_v2";
         
         const galleryCarousel = document.getElementById('gallery-carousel');
         const gallery = document.getElementById('gallery');
@@ -239,7 +249,9 @@
         const flipbookThumbnails = document.getElementById('flipbook-thumbnails');
         const bookWrapper = document.getElementById('book-wrapper');
 
+        // ==========================================
         // 初始化基礎結構
+        // ==========================================
         for (let i = 1; i <= totalPhotos; i++) {
             const src = `images/photo${i}.jpg`; 
             
@@ -306,7 +318,7 @@
         }
 
         // ==========================================
-        // 核心：兩階段動態輪播載入 (先 1~6，再 7~39)
+        // 兩階段動態輪播載入 (先 1~6，再 7~39)
         // ==========================================
         const slidesElements = []; 
         let currentCarouselIndex = 0; 
@@ -352,15 +364,12 @@
             }
         }
 
-        // 階段一：只載入 1 到 6 張
         const batch1 = [1, 2, 3, 4, 5, 6];
         loadBatch(batch1).then(validResults1 => {
             appendToCarousel(validResults1);
-
             if (slidesElements.length > 0) {
                 currentCarouselIndex = Math.floor(Math.random() * slidesElements.length);
                 slidesElements[currentCarouselIndex].classList.add('active');
-                
                 setInterval(() => {
                     if (slidesElements.length > 1) {
                         slidesElements.forEach(slide => slide.classList.remove('active'));
@@ -370,10 +379,8 @@
                 }, 4000);
             }
 
-            // 階段二：背景載入 7 到 39 張
             const batch2 = [];
             for (let i = 7; i < totalPhotos; i++) batch2.push(i);
-            
             if(batch2.length > 0) {
                 loadBatch(batch2).then(validResults2 => {
                     appendToCarousel(validResults2);
@@ -381,20 +388,37 @@
             }
         });
 
-        // -----------------------------------------
-        // 進入相簿與裝置判定分流
-        // -----------------------------------------
+        // ==========================================
+        // 進入相簿與計數器邏輯
+        // ==========================================
         function enterAlbum() {
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
             window.scrollTo(0, 0); 
         }
 
+        // --- 網頁總開啟次數 ---
+        function recordPageView() {
+            const countEl = document.getElementById('total-views-count');
+            if(!sessionStorage.getItem('page_viewed_session')) {
+                sessionStorage.setItem('page_viewed_session', 'true');
+                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/page_views/up`)
+                    .then(r => r.json()).then(d => { if(d.count) countEl.innerText = d.count; }).catch(e=>{});
+            } else {
+                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/page_views`)
+                    .then(r => r.json()).then(d => { if(d.count) countEl.innerText = d.count; }).catch(e=>{});
+            }
+        }
+        recordPageView(); // 網頁載入時立刻觸發
+
         function openPhotoView(index) {
             if (window.innerWidth <= 768) openLightbox(index);
             else openFlipbookModal(index);
         }
 
+        // ==========================================
+        // 手機版：傳統燈箱與單圖計數邏輯
+        // ==========================================
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         let currentGridPhotoIndex = 1; 
@@ -416,6 +440,22 @@
                 activeThumb.classList.add('active');
                 activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
             }
+
+            // 觸發單張照片瀏覽計數
+            recordPhotoView(index);
+        }
+
+        function recordPhotoView(index) {
+            const viewCountEl = document.getElementById('lightbox-view-count');
+            viewCountEl.innerText = '--';
+            if(!sessionStorage.getItem(`photo_${index}_viewed`)) {
+                sessionStorage.setItem(`photo_${index}_viewed`, 'true');
+                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${index}/up`)
+                    .then(r => r.json()).then(d => { if(d.count) viewCountEl.innerText = d.count; }).catch(e=>{});
+            } else {
+                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${index}`)
+                    .then(r => r.json()).then(d => { if(d.count) viewCountEl.innerText = d.count; }).catch(e=>{});
+            }
         }
 
         lightboxImg.addEventListener('click', function(e) {
@@ -435,6 +475,9 @@
             if (gridTouchendX > gridTouchstartX + 40) prevPhoto();
         }, {passive: true});
 
+        // ==========================================
+        // 電腦版：3D 相本彈窗與跨頁計數邏輯
+        // ==========================================
         const flipbookModal = document.getElementById('flipbook-modal');
         function openFlipbookModal(photoIndex) { flipbookModal.classList.add('active'); jumpToPaper(photoIndex); }
         function closeFlipbookModal() { flipbookModal.classList.remove('active'); }
@@ -477,21 +520,62 @@
         function updateFlipbookUI() {
             const counter = document.getElementById('flipbook-counter');
             const thumbs = document.querySelectorAll('#flipbook-thumbnails img');
+            const fbBadge = document.getElementById('flipbook-view-badge');
+            const fbCountEl = document.getElementById('flipbook-view-count');
+
             thumbs.forEach(t => t.classList.remove('active'));
 
             let leftPhoto = (currentPaperLocation - 2) * 2 + 1;
             let rightPhoto = (currentPaperLocation - 1) * 2;
             let text = "";
 
-            if (currentPaperLocation === 1) text = "封面";
-            else if (currentPaperLocation === maxPaperLocation) text = "封底";
+            if (currentPaperLocation === 1) {
+                text = "封面";
+                fbBadge.style.display = 'none'; // 封面不顯示瀏覽數
+            } 
+            else if (currentPaperLocation === maxPaperLocation) {
+                text = "封底";
+                fbBadge.style.display = 'none'; // 封底不顯示瀏覽數
+            } 
             else {
+                fbBadge.style.display = 'inline';
+                fbCountEl.innerText = '--';
+                
                 let shown = [];
-                if (leftPhoto >= 1 && leftPhoto <= totalPhotos) { shown.push(leftPhoto); const t = document.getElementById(`fb-thumb-${leftPhoto}`); if (t) t.classList.add('active'); }
-                if (rightPhoto >= 1 && rightPhoto <= totalPhotos) { shown.push(rightPhoto); const t = document.getElementById(`fb-thumb-${rightPhoto}`); if (t) t.classList.add('active'); }
+                let promises = [];
+                let totalViews = 0;
+
+                [leftPhoto, rightPhoto].forEach(idx => {
+                    if (idx >= 1 && idx <= totalPhotos) { 
+                        shown.push(idx); 
+                        const t = document.getElementById(`fb-thumb-${idx}`); 
+                        if (t) t.classList.add('active'); 
+
+                        // 同時觸發這兩張照片的計數並加總
+                        if(!sessionStorage.getItem(`photo_${idx}_viewed`)) {
+                            sessionStorage.setItem(`photo_${idx}_viewed`, 'true');
+                            promises.push(
+                                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${idx}/up`)
+                                    .then(r => r.json()).then(d => { if(d.count) totalViews += d.count; }).catch(e=>{})
+                            );
+                        } else {
+                            promises.push(
+                                fetch(`https://api.counterapi.dev/v1/${API_NAMESPACE}/photo_${idx}`)
+                                    .then(r => r.json()).then(d => { if(d.count) totalViews += d.count; }).catch(e=>{})
+                            );
+                        }
+                    }
+                });
+                
                 if (shown.length === 2) text = `第 ${shown[0]} - ${shown[1]} 張 / 共 ${totalPhotos} 張`;
                 else if (shown.length === 1) text = `第 ${shown[0]} 張 / 共 ${totalPhotos} 張`;
+
+                // 等這兩張照片的瀏覽數都獲取完畢後，顯示加總結果
+                Promise.all(promises).then(() => {
+                    if(totalViews > 0) fbCountEl.innerText = totalViews;
+                });
             }
+            
             counter.innerText = text;
             
             const activeThumb = document.querySelector('#flipbook-thumbnails img.active');
